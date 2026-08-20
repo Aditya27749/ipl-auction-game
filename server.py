@@ -149,9 +149,13 @@ async def websocket_endpoint(websocket: WebSocket, room_code: str, player_id: st
                     await room.present_next_player()
                     
             elif msg_type == "sell_player":
+                logger.info(f"Received sell_player from {player_id}")
                 # Only host can sell
                 if room_data['host_id'] == player_id:
+                    logger.info("Host authorized, selling player")
                     await room.sell_player()
+                else:
+                    logger.warning(f"Unauthorized sell attempt from {player_id} (host is {room_data['host_id']})")
                     
     except WebSocketDisconnect:
         logger.info(f"Client {player_id} disconnected")

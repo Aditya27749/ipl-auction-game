@@ -159,6 +159,7 @@ function bindEvents() {
   // Sell button sends sell command
   if(els.auction.btnSell) {
     els.auction.btnSell.addEventListener('click', () => {
+      console.log('SELL button clicked! Sending message to server...');
       sendMessage({ type: 'sell_player' });
     });
   }
