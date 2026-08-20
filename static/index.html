@@ -184,20 +184,11 @@
             <span class="bp-value" id="player-base-price">₹0.50 CR</span>
           </div>
 
-          <!-- Current Bid -->
-          <div class="current-bid-section">
-            <div class="bid-amount" id="current-bid-amount">₹0.50 CR</div>
-            <div class="bid-holder" id="current-bidder-name">Waiting for bids...</div>
+          <div class="current-bid-info">
+            <div class="bid-label">Current Bid</div>
+            <div class="bid-amount" id="current-bid-amount">₹0.5 CR</div>
+            <div class="bidder-name" id="current-bidder-name">Waiting for bids...</div>
           </div>
-        </div>
-
-        <!-- Timer -->
-        <div class="timer-container">
-          <svg class="timer-svg" viewBox="0 0 100 100">
-            <circle class="timer-track" cx="50" cy="50" r="45" />
-            <circle class="timer-ring" id="timer-ring" cx="50" cy="50" r="45" />
-          </svg>
-          <div class="timer-text" id="timer-seconds">15</div>
         </div>
 
         <!-- Bid Controls -->
@@ -214,9 +205,10 @@
             <button id="btn-place-bid" class="btn btn-primary btn-glow btn-bid">
               🔨 PLACE BID
             </button>
-            <button id="btn-skip-bid" class="btn btn-outline btn-skip">
-              SKIP ⏭
-            </button>
+          </div>
+          <div class="host-controls" id="host-controls" style="display: none; margin-top: 1rem; display: flex; gap: 0.5rem; width: 100%;">
+            <button id="btn-skip-bid" class="btn btn-secondary" style="flex: 1;">SKIP ⏭</button>
+            <button id="btn-sell-player" class="btn btn-primary" style="flex: 1; background: var(--success-green); color: white;">SELL 🔨</button>
           </div>
         </div>
 

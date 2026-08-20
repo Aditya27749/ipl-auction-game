@@ -84,6 +84,8 @@ function cacheDOMElements() {
       // Controls
       btnBid: document.getElementById('btn-place-bid'),
       btnSkip: document.getElementById('btn-skip-bid'),
+      btnSell: document.getElementById('btn-sell-player'),
+      hostControls: document.getElementById('host-controls'),
       customBid: document.getElementById('custom-bid-input'),
       quickBids: document.querySelectorAll('.btn-quick-bid'),
       
@@ -148,9 +150,18 @@ function bindEvents() {
   els.auction.btnBid.addEventListener('click', () => placeBid(null));
   
   // Skip button sends skip command
-  els.auction.btnSkip.addEventListener('click', () => {
-    sendMessage({ type: 'skip_player' });
-  });
+  if(els.auction.btnSkip) {
+    els.auction.btnSkip.addEventListener('click', () => {
+      sendMessage({ type: 'skip_player' });
+    });
+  }
+  
+  // Sell button sends sell command
+  if(els.auction.btnSell) {
+    els.auction.btnSell.addEventListener('click', () => {
+      sendMessage({ type: 'sell_player' });
+    });
+  }
   
   // Quick bid buttons
   els.auction.quickBids.forEach(btn => {
@@ -355,6 +366,9 @@ function handleWsMessage(msg) {
       showScreen('auction');
       state.totalPlayers = msg.total_players || 0;
       if (msg.budgets) updateAllBudgets(msg.budgets);
+      if (state.isHost && els.auction.hostControls) {
+          els.auction.hostControls.style.display = 'flex';
+      }
       addLogEntry('🏏 Auction started! Let the bidding begin!');
       break;
     case 'new_player':
@@ -362,9 +376,6 @@ function handleWsMessage(msg) {
       break;
     case 'bid_update':
       updateBid(msg.amount, msg.bidder_name, msg.bidder_id);
-      break;
-    case 'timer':
-      updateTimer(msg.seconds);
       break;
     case 'player_sold':
       handlePlayerSold(msg);
@@ -504,26 +515,7 @@ function updateBid(amount, bidderName, bidderId) {
   addLogEntry(`💰 ${bidderName} bid ${formatCurrency(amount)}`);
 }
 
-function updateTimer(seconds) {
-  state.timerSeconds = seconds;
-  els.auction.timerText.innerText = seconds;
-  
-  const maxTime = 15;
-  const circleLen = 283; // 2 * pi * 45
-  const dashoffset = circleLen - (seconds / maxTime) * circleLen;
-  els.auction.timerRing.style.strokeDashoffset = dashoffset;
-  
-  if (seconds > 10) {
-    els.auction.timerRing.style.stroke = 'var(--success-green)';
-    els.auction.timerRing.classList.remove('timer-pulse');
-  } else if (seconds > 5) {
-    els.auction.timerRing.style.stroke = 'var(--primary-gold)';
-    els.auction.timerRing.classList.remove('timer-pulse');
-  } else {
-    els.auction.timerRing.style.stroke = 'var(--danger-red)';
-    els.auction.timerRing.classList.add('timer-pulse');
-  }
-}
+
 
 function placeBid(amount) {
   if (!state.currentAuctionPlayer) return;

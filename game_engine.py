@@ -15,7 +15,6 @@ class AuctionRoom:
         self.current_player_index = -1
         self.current_bid = 0.0
         self.current_bidder: Optional[str] = None
-        self.timer_task: Optional[asyncio.Task] = None
         self.auction_active = False
         self.pick_order = 0
         self.bid_lock = asyncio.Lock()
@@ -64,13 +63,6 @@ class AuctionRoom:
 
     async def present_next_player(self):
         """Present the next player for auction."""
-        if self.timer_task and not self.timer_task.done():
-            self.timer_task.cancel()
-            try:
-                await self.timer_task
-            except asyncio.CancelledError:
-                pass
-            
         self.current_player_index += 1
         
         # Check if all teams are full or all players presented
@@ -93,8 +85,6 @@ class AuctionRoom:
             "index": self.current_player_index + 1,
             "total": len(self.cricket_players)
         })
-        
-        self.timer_task = asyncio.create_task(self.timer_countdown())
 
     async def place_bid(self, user_id: str, amount: float):
         """Process a bid with full validation and race condition protection."""
@@ -142,30 +132,9 @@ class AuctionRoom:
                 "bidder_id": user_id
             })
             
-            # Reset timer on new bid
-            if self.timer_task and not self.timer_task.done():
-                self.timer_task.cancel()
-                try:
-                    await self.timer_task
-                except asyncio.CancelledError:
-                    pass
-            self.timer_task = asyncio.create_task(self.timer_countdown())
-            
             return True, "Bid placed successfully"
 
-    async def timer_countdown(self):
-        """15-second countdown timer, broadcasts each tick."""
-        try:
-            for i in range(15, -1, -1):
-                await self.broadcast({
-                    "type": "timer",
-                    "seconds": i
-                })
-                await asyncio.sleep(1)
-                
-            await self.sell_player()
-        except asyncio.CancelledError:
-            pass
+
 
     async def sell_player(self):
         """Finalize the sale of the current player."""
@@ -246,9 +215,6 @@ class AuctionRoom:
         self.auction_active = False
         self.status = 'completed'
         update_room_status(self.room_id, 'completed')
-        
-        if self.timer_task and not self.timer_task.done():
-            self.timer_task.cancel()
         
         results = []
         for user_id, player_info in self.players.items():

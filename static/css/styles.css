@@ -1212,7 +1212,6 @@ select option {
   }
 
   .auction-sidebar {
-    order: -1;
     max-height: none;
     display: grid;
     grid-template-columns: repeat(2, 1fr);

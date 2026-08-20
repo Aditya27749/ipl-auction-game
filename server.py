@@ -146,8 +146,11 @@ async def websocket_endpoint(websocket: WebSocket, room_code: str, player_id: st
             elif msg_type == "skip_player":
                 # Any player can vote to skip, but only process if host
                 if room_data['host_id'] == player_id:
-                    if room.timer_task and not room.timer_task.done():
-                        room.timer_task.cancel()
+                    await room.present_next_player()
+                    
+            elif msg_type == "sell_player":
+                # Only host can sell
+                if room_data['host_id'] == player_id:
                     await room.sell_player()
                     
     except WebSocketDisconnect:
