@@ -22,10 +22,16 @@ init_db()
 
 # Auto-seed players if database is empty
 from seed_data import seed_players
+import subprocess
 players = get_all_players()
 if not players:
     seed_players()
-    logging.info("Database seeded with IPL players")
+    logging.info("Database seeded with IPL players from seed_data.py")
+    try:
+        subprocess.run(["python", "add_100_players.py"], check=True)
+        logging.info("Database seeded with 100+ additional players")
+    except Exception as e:
+        logger.error(f"Failed to add additional 100 players: {e}")
 
 app = FastAPI(title="IPL Auction Arena")
 
