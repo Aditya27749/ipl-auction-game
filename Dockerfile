@@ -13,4 +13,4 @@ COPY . .
 EXPOSE 7860
 
 # Command to run the application
-CMD ["python", "server.py"]
+CMD ["python", "app.py"]
