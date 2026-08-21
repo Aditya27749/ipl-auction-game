@@ -227,15 +227,20 @@ class AuctionRoom:
 
     async def sell_player(self):
         """Finalize the sale of the current player."""
-        current_task = asyncio.current_task()
-        if self.timer_task and self.timer_task != current_task:
-            self.timer_task.cancel()
-            
-        if self.current_player_index < 0 or self.current_player_index >= len(self.cricket_players):
-            await self.present_next_player()
+        if getattr(self, '_is_selling', False):
             return
-            
-        current_player = self.cricket_players[self.current_player_index]
+        self._is_selling = True
+        
+        try:
+            current_task = asyncio.current_task()
+            if self.timer_task and self.timer_task != current_task:
+                self.timer_task.cancel()
+                
+            if self.current_player_index < 0 or self.current_player_index >= len(self.cricket_players):
+                await self.present_next_player()
+                return
+                
+            current_player = self.cricket_players[self.current_player_index]
         
         if self.current_bidder:
             buyer_info = self.players[self.current_bidder]
@@ -303,6 +308,11 @@ class AuctionRoom:
             
         await asyncio.sleep(2.5)
         await self.present_next_player()
+        
+        except Exception as e:
+            logger.error(f"Error in sell_player: {e}")
+        finally:
+            self._is_selling = False
 
     async def end_auction(self):
         """End the auction and calculate final scores."""
