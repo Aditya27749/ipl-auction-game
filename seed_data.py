@@ -122,7 +122,33 @@ def seed_players(db_path='ipl_auction.db'):
         ("Ramandeep Singh", "Indian", "All-Rounder", "Medium", "KKR", 12, 150, 6, 18.0, 30.0, 140.0, 9.0, 0.2, 4.0),
         ("Vivrant Sharma", "Indian", "All-Rounder", "Spin", "SRH", 5, 80, 2, 25.0, 35.0, 120.0, 8.5, 0.2, 3.5),
         ("Hrithik Shokeen", "Indian", "Bowler", "Spin", "MI", 10, 40, 5, 10.0, 40.0, 100.0, 8.5, 0.2, 3.5),
-        ("Kartik Tyagi", "Indian", "Bowler", "Fast", "GT", 20, 15, 15, 4.0, 35.0, 70.0, 9.5, 0.2, 4.0)
+        ("Kartik Tyagi", "Indian", "Bowler", "Fast", "GT", 20, 15, 15, 4.0, 35.0, 70.0, 9.5, 0.2, 4.0),
+        
+        # New Additions
+        ("AB de Villiers", "Overseas", "Batsman", "Medium", "RCB", 184, 5162, 0, 39.7, 0.0, 151.68, 0.0, 2.0, 9.8),
+        ("Chris Gayle", "Overseas", "Batsman", "Spin", "PBKS", 142, 4965, 18, 39.72, 34.0, 148.96, 7.9, 2.0, 9.5),
+        ("Lasith Malinga", "Overseas", "Bowler", "Fast", "MI", 122, 88, 170, 5.5, 19.8, 95.0, 7.14, 2.0, 9.6),
+        ("Suresh Raina", "Indian", "Batsman", "Spin", "CSK", 205, 5528, 25, 32.5, 34.0, 136.7, 7.3, 2.0, 9.0),
+        ("Kieron Pollard", "Overseas", "All-Rounder", "Medium", "MI", 189, 3412, 69, 28.67, 31.6, 147.32, 8.7, 2.0, 8.8),
+        ("Shikhar Dhawan", "Indian", "Batsman", "Spin", "PBKS", 217, 6617, 4, 35.38, 16.5, 127.14, 8.2, 1.5, 8.5),
+        ("Gautam Gambhir", "Indian", "Batsman", "Spin", "KKR", 154, 4217, 0, 31.0, 0.0, 123.88, 0.0, 1.5, 8.0),
+        ("Shane Watson", "Overseas", "All-Rounder", "Medium", "CSK", 145, 3874, 92, 30.99, 29.15, 137.91, 7.93, 1.5, 8.5),
+        ("Sachin Tendulkar", "Indian", "Batsman", "Spin", "MI", 78, 2334, 0, 34.83, 0.0, 119.81, 0.0, 2.0, 9.0),
+        ("Yuvraj Singh", "Indian", "All-Rounder", "Spin", "PBKS", 132, 2750, 36, 24.77, 29.91, 129.71, 7.43, 2.0, 8.5),
+        
+        # Even More Additions (Current Stars)
+        ("Shreyas Iyer", "Indian", "Batsman", "Spin", "KKR", 115, 3127, 0, 32.23, 0.0, 127.42, 0.0, 1.5, 8.0),
+        ("Shivam Dube", "Indian", "All-Rounder", "Medium", "CSK", 65, 1378, 4, 30.62, 34.25, 148.97, 9.13, 1.0, 8.0),
+        ("Jofra Archer", "Overseas", "Bowler", "Fast", "MI", 40, 195, 48, 15.0, 24.39, 157.25, 7.43, 2.0, 8.5),
+        ("Nicholas Pooran", "Overseas", "Wicket-Keeper", None, "LSG", 75, 1769, 0, 31.03, 0.0, 159.22, 0.0, 2.0, 8.5),
+        ("Tim David", "Overseas", "Batsman", "Medium", "MI", 38, 659, 0, 28.65, 0.0, 172.51, 0.0, 1.5, 7.5),
+        ("Matheesha Pathirana", "Overseas", "Bowler", "Fast", "CSK", 20, 0, 34, 0.0, 17.52, 0.0, 7.87, 1.0, 8.5),
+        ("Rajat Patidar", "Indian", "Batsman", "Spin", "RCB", 27, 799, 0, 34.73, 0.0, 158.53, 0.0, 0.5, 7.5),
+        ("Rachin Ravindra", "Overseas", "All-Rounder", "Spin", "CSK", 14, 222, 0, 15.85, 0.0, 160.86, 0.0, 1.0, 7.0),
+        ("Tristan Stubbs", "Overseas", "Wicket-Keeper", None, "DC", 18, 405, 0, 45.0, 0.0, 176.08, 0.0, 1.0, 8.0),
+        ("Gerald Coetzee", "Overseas", "Bowler", "Fast", "MI", 10, 14, 13, 7.0, 26.23, 116.66, 10.18, 1.0, 7.5),
+        ("Mayank Yadav", "Indian", "Bowler", "Fast", "LSG", 3, 0, 7, 0.0, 12.14, 0.0, 6.98, 0.2, 7.5),
+        ("Jake Fraser-McGurk", "Overseas", "Batsman", "Spin", "DC", 9, 330, 0, 36.66, 0.0, 234.04, 0.0, 0.5, 8.0)
     ]
 
     for p in players:

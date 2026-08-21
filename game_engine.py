@@ -12,6 +12,7 @@ class AuctionRoom:
         self.room_id = room_id
         self.players: Dict[str, dict] = {} # {user_id: {"ws": websocket, "name": str, "budget": float}}
         self.cricket_players: List[dict] = []
+        self.unsold_players: List[dict] = []
         self.current_player_index = -1
         self.current_bid = 0.0
         self.current_bidder: Optional[str] = None
@@ -19,6 +20,8 @@ class AuctionRoom:
         self.pick_order = 0
         self.bid_lock = asyncio.Lock()
         self.status = 'waiting'
+        self.timer_task: Optional[asyncio.Task] = None
+        self.timer_seconds = 15
         
     async def broadcast(self, message: dict):
         """Send message to all connected WebSocket clients."""
@@ -33,6 +36,26 @@ class AuctionRoom:
                     
         for user_id in dead_connections:
             self.players[user_id]["ws"] = None
+
+    async def start_timer(self):
+        if self.timer_task:
+            self.timer_task.cancel()
+        
+        self.timer_seconds = 15
+        self.timer_task = asyncio.create_task(self._timer_loop())
+
+    async def _timer_loop(self):
+        try:
+            while self.timer_seconds > 0:
+                await self.broadcast({"type": "timer_update", "seconds": self.timer_seconds})
+                await asyncio.sleep(1)
+                self.timer_seconds -= 1
+            
+            # Timer reached 0
+            await self.broadcast({"type": "timer_update", "seconds": 0})
+            await self.sell_player()
+        except asyncio.CancelledError:
+            pass
 
     async def start_auction(self, all_cricket_players: List[dict]):
         """Shuffle players and begin the auction."""
@@ -71,9 +94,17 @@ class AuctionRoom:
             for uid in self.players
         )
         
-        if self.current_player_index >= len(self.cricket_players) or all_teams_full:
+        if all_teams_full:
             await self.end_auction()
             return
+            
+        if self.current_player_index >= len(self.cricket_players):
+            if self.unsold_players:
+                self.cricket_players.extend(self.unsold_players)
+                self.unsold_players = []
+            else:
+                await self.end_auction()
+                return
             
         current_player = self.cricket_players[self.current_player_index]
         self.current_bid = current_player['base_price']
@@ -85,6 +116,7 @@ class AuctionRoom:
             "index": self.current_player_index + 1,
             "total": len(self.cricket_players)
         })
+        await self.start_timer()
 
     async def place_bid(self, user_id: str, amount: float):
         """Process a bid with full validation and race condition protection."""
@@ -131,6 +163,7 @@ class AuctionRoom:
                 "amount": amount,
                 "bidder_id": user_id
             })
+            await self.start_timer()
             
             return True, "Bid placed successfully"
 
@@ -138,6 +171,10 @@ class AuctionRoom:
 
     async def sell_player(self):
         """Finalize the sale of the current player."""
+        current_task = asyncio.current_task()
+        if self.timer_task and self.timer_task != current_task:
+            self.timer_task.cancel()
+            
         if self.current_player_index < 0 or self.current_player_index >= len(self.cricket_players):
             await self.present_next_player()
             return
@@ -206,12 +243,16 @@ class AuctionRoom:
                 "type": "player_unsold",
                 "player": current_player
             })
+            self.unsold_players.append(current_player)
             
         await asyncio.sleep(2.5)
         await self.present_next_player()
 
     async def end_auction(self):
         """End the auction and calculate final scores."""
+        if self.timer_task:
+            self.timer_task.cancel()
+            
         self.auction_active = False
         self.status = 'completed'
         update_room_status(self.room_id, 'completed')

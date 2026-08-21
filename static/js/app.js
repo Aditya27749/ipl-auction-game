@@ -375,6 +375,18 @@ function handleWsMessage(msg) {
     case 'new_player':
       renderNewPlayer(msg.player, msg.index, msg.total);
       break;
+    case 'timer_update':
+      if (document.getElementById('bidding-timer')) {
+        document.getElementById('bidding-timer').innerText = msg.seconds;
+        if (msg.seconds <= 5) {
+          document.getElementById('bidding-timer-container').style.color = '#ff4444';
+          document.getElementById('bidding-timer-container').style.textShadow = '0 0 10px rgba(255, 68, 68, 0.5)';
+        } else {
+          document.getElementById('bidding-timer-container').style.color = '#ffeb3b';
+          document.getElementById('bidding-timer-container').style.textShadow = '0 0 10px rgba(255, 235, 59, 0.5)';
+        }
+      }
+      break;
     case 'bid_update':
       updateBid(msg.amount, msg.bidder_name, msg.bidder_id);
       break;
