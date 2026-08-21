@@ -91,6 +91,16 @@ async def api_join_room(code: str, req: JoinRoomReq):
     join_room(code, player_id, req.player_name)
     return {"player_id": player_id}
 
+async def cleanup_room_later(room_code: str):
+    """Wait 5 minutes before destroying an empty room to allow players to reconnect."""
+    await asyncio.sleep(300)
+    if room_code in active_rooms:
+        room = active_rooms[room_code]
+        all_disconnected = all(p["ws"] is None for p in room.players.values())
+        if all_disconnected:
+            logger.info(f"Room {room_code} empty for 5 minutes, destroying")
+            del active_rooms[room_code]
+
 @app.websocket("/ws/{room_code}/{player_id}")
 async def websocket_endpoint(websocket: WebSocket, room_code: str, player_id: str):
     await websocket.accept()
@@ -202,12 +212,12 @@ async def websocket_endpoint(websocket: WebSocket, room_code: str, player_id: st
         if room_data:
             await broadcast_lobby_update(room, room_data['host_id'])
             
-        # Clean up if all disconnected and auction is done
+        # Clean up after 5 minutes if all disconnected
         all_disconnected = all(p["ws"] is None for p in room.players.values())
         if all_disconnected:
             if room_code in active_rooms:
-                logger.info(f"All players disconnected from room {room_code}, cleaning up")
-                del active_rooms[room_code]
+                logger.info(f"All players disconnected from room {room_code}, waiting 5 mins before cleanup")
+                asyncio.create_task(cleanup_room_later(room_code))
     except Exception as e:
         logger.error(f"WebSocket error for {player_id}: {e}")
         if player_id in room.players:
