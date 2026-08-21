@@ -429,6 +429,11 @@ function handleWsMessage(msg) {
         }
       }
       break;
+    case 'kicked':
+      clearSession();
+      alert('You have been removed from the room by the host.');
+      window.location.reload();
+      break;
     case 'team_update':
       if (msg.player_id === state.playerId) {
         updateMyTeam(msg.team);
@@ -445,6 +450,12 @@ function handleWsMessage(msg) {
   }
 }
 
+function confirmKick(targetId, targetName) {
+  if (confirm(`Are you sure you want to remove ${targetName} from the room?`)) {
+    sendMessage({ type: 'kick_player', target_id: targetId });
+  }
+}
+
 function updateLobby(players) {
   els.lobby.playersList.innerHTML = '';
   
@@ -453,17 +464,38 @@ function updateLobby(players) {
     return;
   }
   
+  // Check host migration
+  const me = players.find(p => p.player_id === state.playerId);
+  if (me && me.is_host !== state.isHost) {
+    state.isHost = me.is_host;
+    saveSession();
+    if (state.isHost) {
+      showToast('You are now the host!', 'success');
+      if (els.auction.hostControls) els.auction.hostControls.style.display = 'flex';
+      els.lobby.btnStart.classList.remove('hidden');
+    }
+  }
+  
   players.forEach(p => {
     const isMe = p.player_id === state.playerId;
     const div = document.createElement('div');
     div.className = `player-list-item glass-card ${isMe ? 'is-me' : ''}`;
+    
+    // Add kick button for host
+    const kickHtml = (state.isHost && !isMe) 
+      ? `<button class="btn btn-danger" style="padding: 0.2rem 0.5rem; font-size: 0.8rem; margin-left: 10px;" onclick="confirmKick('${p.player_id}', '${p.name || p.player_name || 'Unknown'}')">Kick</button>`
+      : '';
+      
     div.innerHTML = `
       <span>
         ${p.name || p.player_name || 'Unknown'} 
         ${p.is_host ? '<span class="host-badge">HOST</span>' : ''}
         ${isMe ? '<span style="color:var(--secondary-blue);font-size:0.75rem;"> (You)</span>' : ''}
       </span>
-      <span class="budget">₹100 CR</span>
+      <div style="display: flex; align-items: center;">
+        <span class="budget">₹100 CR</span>
+        ${kickHtml}
+      </div>
     `;
     els.lobby.playersList.appendChild(div);
   });
@@ -471,9 +503,8 @@ function updateLobby(players) {
   // Enable start button for host if 2+ players
   if (state.isHost) {
     els.lobby.btnStart.disabled = players.length < 2;
-    if (players.length >= 2) {
-      els.lobby.btnStart.classList.remove('hidden');
-    }
+  } else {
+    els.lobby.btnStart.classList.add('hidden');
   }
 }
 

@@ -11,7 +11,7 @@ from fastapi.staticfiles import StaticFiles
 from fastapi.responses import FileResponse
 from pydantic import BaseModel
 
-from models import init_db, create_room, join_room, get_room, get_all_players
+from models import init_db, create_room, join_room, get_room, get_all_players, update_room_host, remove_player_from_room
 from game_engine import AuctionRoom
 
 logging.basicConfig(level=logging.INFO)
@@ -167,13 +167,40 @@ async def websocket_endpoint(websocket: WebSocket, room_code: str, player_id: st
                 else:
                     logger.warning(f"Unauthorized sell attempt from {player_id} (host is {room_data['host_id']})")
                     
+            elif msg_type == "kick_player":
+                room_data = get_room(room_code)
+                if room_data['host_id'] == player_id:
+                    target_id = msg.get("target_id")
+                    if target_id and target_id in room.players:
+                        target_ws = room.players[target_id]["ws"]
+                        if target_ws:
+                            await target_ws.send_json({"type": "kicked"})
+                            await target_ws.close()
+                        del room.players[target_id]
+                        remove_player_from_room(room_code, target_id)
+                        await broadcast_lobby_update(room, room_data['host_id'])
+                        
     except WebSocketDisconnect:
         logger.info(f"Client {player_id} disconnected")
         if player_id in room.players:
             room.players[player_id]["ws"] = None
             
+        # Host migration if the host disconnects
+        room_data = get_room(room_code)
+        if room_data and room_data['host_id'] == player_id:
+            new_host = None
+            for p_id, p_info in room.players.items():
+                if p_id != player_id and p_info["ws"] is not None:
+                    new_host = p_id
+                    break
+            if new_host:
+                update_room_host(room_code, new_host)
+                room_data['host_id'] = new_host
+                logger.info(f"Host migrated to {new_host} in room {room_code}")
+            
         # Broadcast updated lobby
-        await broadcast_lobby_update(room, room_data['host_id'])
+        if room_data:
+            await broadcast_lobby_update(room, room_data['host_id'])
             
         # Clean up if all disconnected and auction is done
         all_disconnected = all(p["ws"] is None for p in room.players.values())

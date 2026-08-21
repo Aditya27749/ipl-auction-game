@@ -127,6 +127,20 @@ def update_room_status(room_id, status):
     conn.commit()
     conn.close()
 
+def update_room_host(room_id, new_host_id):
+    conn = get_connection()
+    cursor = conn.cursor()
+    cursor.execute("UPDATE rooms SET host_id = ? WHERE id = ?", (new_host_id, room_id))
+    conn.commit()
+    conn.close()
+
+def remove_player_from_room(room_id, player_id):
+    conn = get_connection()
+    cursor = conn.cursor()
+    cursor.execute("DELETE FROM room_players WHERE room_id = ? AND player_id = ?", (room_id, player_id))
+    conn.commit()
+    conn.close()
+
 def update_player_budget(room_id, player_id, new_budget):
     conn = get_connection()
     cursor = conn.cursor()
