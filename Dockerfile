@@ -9,8 +9,8 @@ RUN pip install --no-cache-dir -r requirements.txt
 # Copy the rest of the application
 COPY . .
 
-# Expose the port FastAPI runs on
-EXPOSE 8000
+# Expose the port Hugging Face Spaces expects
+EXPOSE 7860
 
 # Command to run the application
 CMD ["python", "server.py"]
