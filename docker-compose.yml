@@ -4,7 +4,7 @@ services:
   ipl-auction:
     build: .
     ports:
-      - "8000:8000"
+      - "80:7860"
     restart: unless-stopped
     volumes:
       - ./ipl_auction.db:/app/ipl_auction.db
