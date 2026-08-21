@@ -5,10 +5,10 @@
 // State management
 const state = {
   currentScreen: 'home',
-  roomCode: sessionStorage.getItem('roomCode') || null,
-  playerId: sessionStorage.getItem('playerId') || null,
-  playerName: sessionStorage.getItem('playerName') || null,
-  isHost: sessionStorage.getItem('isHost') === 'true',
+  roomCode: localStorage.getItem('roomCode') || null,
+  playerId: localStorage.getItem('playerId') || null,
+  playerName: localStorage.getItem('playerName') || null,
+  isHost: localStorage.getItem('isHost') === 'true',
   ws: null,
   budget: 100,
   myTeam: [],
@@ -20,7 +20,7 @@ const state = {
   allBudgets: {},
   auctionIndex: 0,
   totalPlayers: 0,
-  hostId: sessionStorage.getItem('hostId') || null,
+  hostId: localStorage.getItem('hostId') || null,
   roleColors: {
     'Batsman': '#2196f3',
     'Bowler': '#ef5350',
@@ -30,15 +30,15 @@ const state = {
 };
 
 function saveSession() {
-  if (state.roomCode) sessionStorage.setItem('roomCode', state.roomCode);
-  if (state.playerId) sessionStorage.setItem('playerId', state.playerId);
-  if (state.playerName) sessionStorage.setItem('playerName', state.playerName);
-  sessionStorage.setItem('isHost', state.isHost);
-  if (state.hostId) sessionStorage.setItem('hostId', state.hostId);
+  if (state.roomCode) localStorage.setItem('roomCode', state.roomCode);
+  if (state.playerId) localStorage.setItem('playerId', state.playerId);
+  if (state.playerName) localStorage.setItem('playerName', state.playerName);
+  localStorage.setItem('isHost', state.isHost);
+  if (state.hostId) localStorage.setItem('hostId', state.hostId);
 }
 
 function clearSession() {
-  sessionStorage.clear();
+  localStorage.clear();
   state.roomCode = null;
   state.playerId = null;
 }
