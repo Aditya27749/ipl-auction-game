@@ -5,10 +5,10 @@
 // State management
 const state = {
   currentScreen: 'home',
-  roomCode: null,
-  playerId: null,
-  playerName: null,
-  isHost: false,
+  roomCode: sessionStorage.getItem('roomCode') || null,
+  playerId: sessionStorage.getItem('playerId') || null,
+  playerName: sessionStorage.getItem('playerName') || null,
+  isHost: sessionStorage.getItem('isHost') === 'true',
   ws: null,
   budget: 100,
   myTeam: [],
@@ -20,7 +20,7 @@ const state = {
   allBudgets: {},
   auctionIndex: 0,
   totalPlayers: 0,
-  hostId: null,
+  hostId: sessionStorage.getItem('hostId') || null,
   roleColors: {
     'Batsman': '#2196f3',
     'Bowler': '#ef5350',
@@ -28,6 +28,20 @@ const state = {
     'Wicket-Keeper': '#66bb6a'
   }
 };
+
+function saveSession() {
+  if (state.roomCode) sessionStorage.setItem('roomCode', state.roomCode);
+  if (state.playerId) sessionStorage.setItem('playerId', state.playerId);
+  if (state.playerName) sessionStorage.setItem('playerName', state.playerName);
+  sessionStorage.setItem('isHost', state.isHost);
+  if (state.hostId) sessionStorage.setItem('hostId', state.hostId);
+}
+
+function clearSession() {
+  sessionStorage.clear();
+  state.roomCode = null;
+  state.playerId = null;
+}
 
 // DOM Elements (cached after DOMContentLoaded)
 let els = {};
@@ -125,7 +139,13 @@ const getWsUrl = () => {
 function init() {
   cacheDOMElements();
   bindEvents();
-  showScreen('home');
+  
+  if (state.roomCode && state.playerId) {
+    showToast('Reconnecting to room...', 'info');
+    connectWebSocket();
+  } else {
+    showScreen('home');
+  }
 }
 
 function bindEvents() {
@@ -248,6 +268,7 @@ async function handleCreateRoom() {
     state.playerName = name;
     state.isHost = true;
     state.hostId = data.host_id;
+    saveSession();
     
     connectWebSocket();
   } catch (err) {
@@ -284,6 +305,7 @@ async function handleJoinRoom() {
     state.playerId = data.player_id;
     state.playerName = name;
     state.isHost = false;
+    saveSession();
     
     connectWebSocket();
   } catch (err) {
@@ -342,6 +364,7 @@ function connectWebSocket() {
 }
 
 function disconnectWs() {
+  clearSession();
   if (state.ws) {
     state.ws.close();
   }

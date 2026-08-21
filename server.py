@@ -122,6 +122,10 @@ async def websocket_endpoint(websocket: WebSocket, room_code: str, player_id: st
     # Broadcast lobby update with normalized player data
     await broadcast_lobby_update(room, room_data['host_id'])
     
+    # Sync state if auction is active
+    if room.auction_active:
+        await room.sync_player_state(player_id)
+    
     try:
         while True:
             data = await websocket.receive_text()

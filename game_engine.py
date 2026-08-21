@@ -37,6 +37,62 @@ class AuctionRoom:
         for user_id in dead_connections:
             self.players[user_id]["ws"] = None
 
+    async def sync_player_state(self, player_id: str):
+        """Send the complete current state to a specific player."""
+        player_info = self.players.get(player_id)
+        if not player_info or not player_info["ws"]:
+            return
+            
+        if self.auction_active:
+            # 1. Start auction layout
+            budgets_data = {uid: {"name": p["name"], "budget": p["budget"]} for uid, p in self.players.items()}
+            try:
+                await player_info["ws"].send_json({
+                    "type": "auction_start",
+                    "total_players": len(self.cricket_players),
+                    "budgets": budgets_data
+                })
+                
+                # 2. Current player
+                if 0 <= self.current_player_index < len(self.cricket_players):
+                    current_player = self.cricket_players[self.current_player_index]
+                    await player_info["ws"].send_json({
+                        "type": "new_player",
+                        "player": current_player,
+                        "index": self.current_player_index + 1,
+                        "total": len(self.cricket_players)
+                    })
+                    
+                    # 3. Current bid
+                    if self.current_bidder:
+                        bidder_name = self.players[self.current_bidder]["name"]
+                        await player_info["ws"].send_json({
+                            "type": "bid_update",
+                            "bidder_name": bidder_name,
+                            "amount": self.current_bid,
+                            "bidder_id": self.current_bidder
+                        })
+                
+                # 4. Current team stats
+                team = get_drafted_players(self.room_id, player_id)
+                normalized_team = []
+                for t in team:
+                    normalized_team.append({
+                        "name": t.get("name", "Unknown"),
+                        "role": t.get("role", "Unknown"),
+                        "nationality": t.get("nationality", "Indian"),
+                        "bought_price": t.get("price_paid", 0),
+                        "ipl_team": t.get("ipl_team", ""),
+                    })
+                await player_info["ws"].send_json({
+                    "type": "team_update",
+                    "player_id": player_id,
+                    "team": normalized_team,
+                    "team_size": len(normalized_team)
+                })
+            except Exception as e:
+                logger.error(f"Error syncing state to {player_id}: {e}")
+
     async def start_timer(self):
         if self.timer_task:
             self.timer_task.cancel()
