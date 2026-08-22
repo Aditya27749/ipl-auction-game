@@ -32,6 +32,12 @@ if not players:
         logging.info("Database seeded with 100+ additional players")
     except Exception as e:
         logger.error(f"Failed to add additional 100 players: {e}")
+        
+    try:
+        subprocess.run(["python", "apply_real_stats.py"], check=True)
+        logging.info("Applied highly accurate real-world stats to top players")
+    except Exception as e:
+        logger.error(f"Failed to apply real stats: {e}")
 
 app = FastAPI(title="IPL Auction Arena")
 
