@@ -48,7 +48,8 @@ if not players:
     try:
         subprocess.run(["python", "add_50_players.py"], check=True)
         subprocess.run(["python", "add_more_players.py"], check=True)
-        logging.info("Added 50+ new domestic and international players")
+        subprocess.run(["python", "add_100_extra_players.py"], check=True)
+        logging.info("Added 150+ new domestic and international players")
     except Exception as e:
         logger.error(f"Failed to add 50 players: {e}")
 
