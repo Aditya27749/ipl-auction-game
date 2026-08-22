@@ -861,90 +861,123 @@ document.addEventListener('DOMContentLoaded', init);
 
 
 
-// --- Advanced Audio System (IPL Style - Low Volume) ---
+// --- Advanced Audio System (Improved IPL Tune) ---
 const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+const GLOBAL_VOLUME = 0.15; // Slightly bumped up but still soft
 
-const GLOBAL_VOLUME = 0.1; // Extremely low, subtle volume
-
-function playTone(freq, type, duration, vol=0.5, delay=0) {
+function playHornTone(freq, duration, delay) {
     if(audioCtx.state === 'suspended') return;
     const osc = audioCtx.createOscillator();
     const gain = audioCtx.createGain();
-    osc.type = type;
+    const filter = audioCtx.createBiquadFilter();
+    
+    // Trumpet-like settings
+    osc.type = 'sawtooth';
+    filter.type = 'lowpass';
+    
+    // Brass filter envelope
+    filter.frequency.setValueAtTime(500, audioCtx.currentTime + delay);
+    filter.frequency.linearRampToValueAtTime(3000, audioCtx.currentTime + delay + 0.05);
+    filter.frequency.linearRampToValueAtTime(1000, audioCtx.currentTime + delay + duration);
+    
     osc.frequency.setValueAtTime(freq, audioCtx.currentTime + delay);
     
-    // Smooth envelope to avoid clicks
+    // Volume envelope (ADSR)
     gain.gain.setValueAtTime(0, audioCtx.currentTime + delay);
-    gain.gain.linearRampToValueAtTime(vol * GLOBAL_VOLUME, audioCtx.currentTime + delay + 0.05);
-    gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + delay + duration);
+    gain.gain.linearRampToValueAtTime(1.0 * GLOBAL_VOLUME, audioCtx.currentTime + delay + 0.03); // Attack
+    gain.gain.linearRampToValueAtTime(0.8 * GLOBAL_VOLUME, audioCtx.currentTime + delay + 0.1);  // Decay
+    gain.gain.setValueAtTime(0.8 * GLOBAL_VOLUME, audioCtx.currentTime + delay + duration - 0.05); // Sustain
+    gain.gain.linearRampToValueAtTime(0, audioCtx.currentTime + delay + duration); // Release
     
-    osc.connect(gain);
+    osc.connect(filter);
+    filter.connect(gain);
     gain.connect(audioCtx.destination);
+    
     osc.start(audioCtx.currentTime + delay);
     osc.stop(audioCtx.currentTime + delay + duration);
 }
 
-// "SOLD" - Stadium Horn Arpeggio (IPL Style) + Gavel Thud
 function playSoldSound() {
     if(audioCtx.state === 'suspended') audioCtx.resume();
     
-    // Gavel Thud
+    // Heavy Gavel Thud (SOLD!)
     const thud = audioCtx.createOscillator();
     const gainThud = audioCtx.createGain();
     thud.type = 'sine';
-    thud.frequency.setValueAtTime(120, audioCtx.currentTime);
-    thud.frequency.exponentialRampToValueAtTime(10, audioCtx.currentTime + 0.1);
-    gainThud.gain.setValueAtTime(1.0 * GLOBAL_VOLUME, audioCtx.currentTime);
-    gainThud.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.1);
+    thud.frequency.setValueAtTime(150, audioCtx.currentTime);
+    thud.frequency.exponentialRampToValueAtTime(10, audioCtx.currentTime + 0.15);
+    gainThud.gain.setValueAtTime(1.5 * GLOBAL_VOLUME, audioCtx.currentTime);
+    gainThud.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.15);
     thud.connect(gainThud);
     gainThud.connect(audioCtx.destination);
     thud.start();
-    thud.stop(audioCtx.currentTime + 0.1);
+    thud.stop(audioCtx.currentTime + 0.15);
 
-    // Trumpet Fanfare (Sawtooth wave for brassy sound)
-    // Notes: C5, E5, G5, C6
-    playTone(523.25, 'sawtooth', 0.2, 0.4, 0.1); // C5
-    playTone(659.25, 'sawtooth', 0.2, 0.4, 0.2); // E5
-    playTone(783.99, 'sawtooth', 0.2, 0.4, 0.3); // G5
-    playTone(1046.50, 'sawtooth', 0.6, 0.5, 0.4); // C6
+    // The Famous Stadium "Charge!" Fanfare
+    // Notes: G4, C5, E5, G5... E5, G5!
+    playHornTone(392.00, 0.15, 0.2); // G4
+    playHornTone(523.25, 0.15, 0.35); // C5
+    playHornTone(659.25, 0.15, 0.5); // E5
+    playHornTone(783.99, 0.3, 0.65); // G5
+    playHornTone(659.25, 0.15, 1.0); // E5
+    playHornTone(783.99, 0.5, 1.15); // G5 (Hold)
 }
 
-// "Bidding" - Subtle coin click / ping
 function playBidSound() {
     if(audioCtx.state === 'suspended') audioCtx.resume();
     const osc = audioCtx.createOscillator();
     const gain = audioCtx.createGain();
     
+    // Clean, crisp digital bell
     osc.type = 'sine';
-    osc.frequency.setValueAtTime(1500, audioCtx.currentTime);
-    osc.frequency.exponentialRampToValueAtTime(500, audioCtx.currentTime + 0.1);
+    osc.frequency.setValueAtTime(1800, audioCtx.currentTime);
+    osc.frequency.exponentialRampToValueAtTime(600, audioCtx.currentTime + 0.15);
     
-    gain.gain.setValueAtTime(0.5 * GLOBAL_VOLUME, audioCtx.currentTime);
-    gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.1);
+    gain.gain.setValueAtTime(0.6 * GLOBAL_VOLUME, audioCtx.currentTime);
+    gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.15);
     
     osc.connect(gain);
     gain.connect(audioCtx.destination);
     
     osc.start();
-    osc.stop(audioCtx.currentTime + 0.1);
+    osc.stop(audioCtx.currentTime + 0.15);
 }
 
-// "Unsold" - Low disappointing hum
 function playUnsoldSound() {
     if(audioCtx.state === 'suspended') audioCtx.resume();
-    playTone(150, 'sawtooth', 0.8, 0.5, 0);
-    playTone(100, 'sawtooth', 0.8, 0.5, 0.2);
+    const osc = audioCtx.createOscillator();
+    const gain = audioCtx.createGain();
+    
+    osc.type = 'sawtooth';
+    osc.frequency.setValueAtTime(150, audioCtx.currentTime);
+    osc.frequency.linearRampToValueAtTime(80, audioCtx.currentTime + 0.6);
+    
+    gain.gain.setValueAtTime(0.4 * GLOBAL_VOLUME, audioCtx.currentTime);
+    gain.gain.linearRampToValueAtTime(0, audioCtx.currentTime + 0.6);
+    
+    // Add a lowpass filter to make it sound muffled/sad
+    const filter = audioCtx.createBiquadFilter();
+    filter.type = 'lowpass';
+    filter.frequency.setValueAtTime(800, audioCtx.currentTime);
+    filter.frequency.linearRampToValueAtTime(200, audioCtx.currentTime + 0.6);
+    
+    osc.connect(filter);
+    filter.connect(gain);
+    gain.connect(audioCtx.destination);
+    
+    osc.start();
+    osc.stop(audioCtx.currentTime + 0.6);
 }
 
-// "Countdown Tick" - Soft wooden block
 function playTickSound() {
     if(audioCtx.state === 'suspended') return;
     
     const osc = audioCtx.createOscillator();
     const gain = audioCtx.createGain();
     
-    osc.type = 'triangle';
-    osc.frequency.setValueAtTime(600, audioCtx.currentTime);
+    // Wooden clock tick
+    osc.type = 'square';
+    osc.frequency.setValueAtTime(800, audioCtx.currentTime);
     osc.frequency.exponentialRampToValueAtTime(100, audioCtx.currentTime + 0.05);
     
     gain.gain.setValueAtTime(0.3 * GLOBAL_VOLUME, audioCtx.currentTime);
@@ -956,4 +989,3 @@ function playTickSound() {
     osc.start();
     osc.stop(audioCtx.currentTime + 0.05);
 }
-
