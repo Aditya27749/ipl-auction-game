@@ -631,8 +631,8 @@ function placeBid(amount) {
     return showToast('Insufficient budget!', 'error');
   }
   
-  if (state.myTeam.length >= 12) {
-    return showToast('Team roster is full (12/12)!', 'error');
+  if (state.myTeam.length >= 15) {
+    return showToast('Team roster is full (15/15)!', 'error');
   }
   
   if (state.currentBidder === state.playerId && amount <= state.currentBid) {

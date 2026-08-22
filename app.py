@@ -216,19 +216,6 @@ async def websocket_endpoint(websocket: WebSocket, room_code: str, player_id: st
         if player_id in room.players:
             room.players[player_id]["ws"] = None
             
-        # Host migration if the host disconnects
-        room_data = get_room(room_code)
-        if room_data and room_data['host_id'] == player_id:
-            new_host = None
-            for p_id, p_info in room.players.items():
-                if p_id != player_id and p_info["ws"] is not None:
-                    new_host = p_id
-                    break
-            if new_host:
-                update_room_host(room_code, new_host)
-                room_data['host_id'] = new_host
-                logger.info(f"Host migrated to {new_host} in room {room_code}")
-            
         # Broadcast updated lobby
         if room_data:
             await broadcast_lobby_update(room, room_data['host_id'])
