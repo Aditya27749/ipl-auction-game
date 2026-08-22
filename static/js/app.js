@@ -616,9 +616,9 @@ function placeBid(amount) {
     } else {
       // Auto-increment based on current bid
       let increment = 0.25;
-      if (state.currentBid >= 10) increment = 0.5;
-      if (state.currentBid >= 20) increment = 1.0;
-      if (state.currentBid >= 50) increment = 2.0;
+      if (state.currentBid >= 3.0) increment = 0.5;
+      if (state.currentBid >= 6.0) increment = 1.0;
+      if (state.currentBid >= 20.0) increment = 2.0;
       amount = state.currentBid + increment;
     }
   }
