@@ -120,8 +120,27 @@ class AuctionRoom:
             
         self.auction_active = True
         self.status = 'auction'
-        self.cricket_players = all_cricket_players.copy()
-        random.shuffle(self.cricket_players)
+        
+        # Separate legends (rating >= 9.0) from regular players
+        legends = [p for p in all_cricket_players if p.get('rating', 0) >= 9.0]
+        regulars = [p for p in all_cricket_players if p.get('rating', 0) < 9.0]
+        
+        import random
+        random.shuffle(legends)
+        random.shuffle(regulars)
+        
+        self.cricket_players = []
+        count = 0
+        
+        # Weave 1 legend into the deck after every 10 regular players
+        for p in regulars:
+            self.cricket_players.append(p)
+            count += 1
+            if count % 10 == 0 and legends:
+                self.cricket_players.append(legends.pop(0))
+                
+        # Append any remaining legends at the very end
+        self.cricket_players.extend(legends)
         
         self.current_player_index = -1
         update_room_status(self.room_id, 'auction')
