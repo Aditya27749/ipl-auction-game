@@ -121,27 +121,43 @@ class AuctionRoom:
         self.auction_active = True
         self.status = 'auction'
         
-        # Separate legends (rating >= 9.0) from regular players
+        # Divide into 3 perfectly balanced tiers
         legends = [p for p in all_cricket_players if p.get('rating', 0) >= 9.0]
-        regulars = [p for p in all_cricket_players if p.get('rating', 0) < 9.0]
+        stars = [p for p in all_cricket_players if 8.0 <= p.get('rating', 0) < 9.0]
+        uncapped = [p for p in all_cricket_players if p.get('rating', 0) < 8.0]
         
         import random
         random.shuffle(legends)
-        random.shuffle(regulars)
+        random.shuffle(stars)
+        random.shuffle(uncapped)
         
         self.cricket_players = []
-        count = 0
         
-        # Weave 1 legend into the deck after every 10 regular players
-        for p in regulars:
-            self.cricket_players.append(p)
-            count += 1
-            if count % 10 == 0 and legends:
-                self.cricket_players.append(legends.pop(0))
+        # Build perfectly balanced "sets" of 10 players
+        # 1 Legend, 4 Stars, 5 Uncapped
+        while legends or stars or uncapped:
+            set_players = []
+            if legends:
+                set_players.append(legends.pop(0))
+            elif stars:
+                set_players.append(stars.pop(0))
                 
-        # Append any remaining legends at the very end
-        self.cricket_players.extend(legends)
-        
+            for _ in range(4):
+                if stars:
+                    set_players.append(stars.pop(0))
+                elif uncapped:
+                    set_players.append(uncapped.pop(0))
+                    
+            for _ in range(5):
+                if uncapped:
+                    set_players.append(uncapped.pop(0))
+                elif stars:
+                    set_players.append(stars.pop(0))
+                    
+            # Shuffle the mini-set so the legend isn't ALWAYS the first player
+            random.shuffle(set_players)
+            self.cricket_players.extend(set_players)
+            
         self.current_player_index = -1
         update_room_status(self.room_id, 'auction')
         
