@@ -261,72 +261,72 @@ class AuctionRoom:
                 
             current_player = self.cricket_players[self.current_player_index]
         
-        if self.current_bidder:
-            buyer_info = self.players[self.current_bidder]
-            new_budget = buyer_info["budget"] - self.current_bid
-            buyer_info["budget"] = new_budget
-            
-            update_player_budget(self.room_id, self.current_bidder, new_budget)
-            
-            self.pick_order += 1
-            current_team = get_drafted_players(self.room_id, self.current_bidder)
-            is_impact = (len(current_team) == 14)  # 15th player is impact
-            
-            draft_player(self.room_id, self.current_bidder, current_player["id"], 
-                         self.current_bid, self.pick_order, is_impact)
-                         
-            # Send player_sold with fields matching frontend expectations
-            await self.broadcast({
-                "type": "player_sold",
-                "player": current_player,
-                "buyer_name": buyer_info["name"],
-                "buyer_id": self.current_bidder,
-                "amount": self.current_bid
-            })
-            
-            # Send updated budgets to all players
-            budgets_data = {}
-            for uid, p in self.players.items():
-                budgets_data[uid] = {"name": p["name"], "budget": p["budget"]}
-            
-            await self.broadcast({
-                "type": "budget_update",
-                "budgets": budgets_data
-            })
-            
-            # Send team update to the buyer
-            team = get_drafted_players(self.room_id, self.current_bidder)
-            # Normalize team data for frontend
-            normalized_team = []
-            for t in team:
-                normalized_team.append({
-                    "name": t.get("name", "Unknown"),
-                    "role": t.get("role", "Unknown"),
-                    "nationality": t.get("nationality", "Indian"),
-                    "bought_price": t.get("price_paid", 0),
-                    "ipl_team": t.get("ipl_team", ""),
-                })
-            
-            if buyer_info["ws"]:
-                try:
-                    await buyer_info["ws"].send_json({
-                        "type": "team_update",
-                        "player_id": self.current_bidder,
-                        "team": normalized_team,
-                        "team_size": len(normalized_team)
-                    })
-                except Exception:
-                    pass
+            if self.current_bidder:
+                buyer_info = self.players[self.current_bidder]
+                new_budget = buyer_info["budget"] - self.current_bid
+                buyer_info["budget"] = new_budget
                 
-        else:
-            await self.broadcast({
-                "type": "player_unsold",
-                "player": current_player
-            })
-            self.unsold_players.append(current_player)
-            
-        await asyncio.sleep(2.5)
-        await self.present_next_player()
+                update_player_budget(self.room_id, self.current_bidder, new_budget)
+                
+                self.pick_order += 1
+                current_team = get_drafted_players(self.room_id, self.current_bidder)
+                is_impact = (len(current_team) == 14)  # 15th player is impact
+                
+                draft_player(self.room_id, self.current_bidder, current_player["id"], 
+                             self.current_bid, self.pick_order, is_impact)
+                             
+                # Send player_sold with fields matching frontend expectations
+                await self.broadcast({
+                    "type": "player_sold",
+                    "player": current_player,
+                    "buyer_name": buyer_info["name"],
+                    "buyer_id": self.current_bidder,
+                    "amount": self.current_bid
+                })
+                
+                # Send updated budgets to all players
+                budgets_data = {}
+                for uid, p in self.players.items():
+                    budgets_data[uid] = {"name": p["name"], "budget": p["budget"]}
+                
+                await self.broadcast({
+                    "type": "budget_update",
+                    "budgets": budgets_data
+                })
+                
+                # Send team update to the buyer
+                team = get_drafted_players(self.room_id, self.current_bidder)
+                # Normalize team data for frontend
+                normalized_team = []
+                for t in team:
+                    normalized_team.append({
+                        "name": t.get("name", "Unknown"),
+                        "role": t.get("role", "Unknown"),
+                        "nationality": t.get("nationality", "Indian"),
+                        "bought_price": t.get("price_paid", 0),
+                        "ipl_team": t.get("ipl_team", ""),
+                    })
+                
+                if buyer_info["ws"]:
+                    try:
+                        await buyer_info["ws"].send_json({
+                            "type": "team_update",
+                            "player_id": self.current_bidder,
+                            "team": normalized_team,
+                            "team_size": len(normalized_team)
+                        })
+                    except Exception:
+                        pass
+                    
+            else:
+                await self.broadcast({
+                    "type": "player_unsold",
+                    "player": current_player
+                })
+                self.unsold_players.append(current_player)
+                
+            await asyncio.sleep(2.5)
+            await self.present_next_player()
         
         except Exception as e:
             logger.error(f"Error in sell_player: {e}")
