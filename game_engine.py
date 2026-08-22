@@ -405,7 +405,7 @@ class AuctionRoom:
         # 3. Budget Efficiency (1.5 pts)
         if len(team) == 15:
             score += 0.5
-        efficiency = 1.0 - (remaining_budget / 100.0)
+        efficiency = 1.0 - (remaining_budget / 120.0)
         score += max(0, min(1.0, efficiency))
 
         # 4. Team Composition (2.0 pts)

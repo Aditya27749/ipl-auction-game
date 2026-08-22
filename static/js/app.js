@@ -10,7 +10,7 @@ const state = {
   playerName: localStorage.getItem('playerName') || null,
   isHost: localStorage.getItem('isHost') === 'true',
   ws: null,
-  budget: 100,
+  budget: 120,
   myTeam: [],
   currentAuctionPlayer: null,
   currentBid: 0,
@@ -493,7 +493,7 @@ function updateLobby(players) {
         ${isMe ? '<span style="color:var(--secondary-blue);font-size:0.75rem;"> (You)</span>' : ''}
       </span>
       <div style="display: flex; align-items: center;">
-        <span class="budget">₹100 CR</span>
+        <span class="budget">₹120 CR</span>
         ${kickHtml}
       </div>
     `;

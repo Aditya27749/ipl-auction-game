@@ -46,7 +46,7 @@ def init_db():
       room_id TEXT NOT NULL,
       player_id TEXT NOT NULL,
       player_name TEXT NOT NULL,
-      budget REAL DEFAULT 100.0,
+      budget REAL DEFAULT 120.0,
       team_score REAL DEFAULT 0,
       PRIMARY KEY (room_id, player_id),
       FOREIGN KEY (room_id) REFERENCES rooms(id)
