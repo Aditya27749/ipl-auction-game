@@ -44,6 +44,13 @@ if not players:
         logging.info("Added historical IPL legends to the database")
     except Exception as e:
         logger.error(f"Failed to add legends: {e}")
+        
+    try:
+        subprocess.run(["python", "add_50_players.py"], check=True)
+        subprocess.run(["python", "add_more_players.py"], check=True)
+        logging.info("Added 50+ new domestic and international players")
+    except Exception as e:
+        logger.error(f"Failed to add 50 players: {e}")
 
 app = FastAPI(title="IPL Auction Arena")
 
