@@ -121,43 +121,22 @@ class AuctionRoom:
         self.auction_active = True
         self.status = 'auction'
         
-        # Divide into 3 perfectly balanced tiers
-        legends = [p for p in all_cricket_players if p.get('rating', 0) >= 9.0]
-        stars = [p for p in all_cricket_players if 8.0 <= p.get('rating', 0) < 9.0]
-        uncapped = [p for p in all_cricket_players if p.get('rating', 0) < 8.0]
+        # Sort all players by rating (highest first)
+        sorted_players = sorted(all_cricket_players, key=lambda x: x.get('rating', 0), reverse=True)
+        
+        # Take the top 120 players (All Legends and Main Stars)
+        main_players = sorted_players[:120]
+        
+        # Take the remaining players (Uncapped / Base Price)
+        remaining_players = sorted_players[120:]
         
         import random
-        random.shuffle(legends)
-        random.shuffle(stars)
-        random.shuffle(uncapped)
+        random.shuffle(main_players)
+        random.shuffle(remaining_players)
         
-        self.cricket_players = []
+        # Combine them so ALL main players appear in the first 120 slots!
+        self.cricket_players = main_players + remaining_players
         
-        # Build perfectly balanced "sets" of 10 players
-        # 1 Legend, 4 Stars, 5 Uncapped
-        while legends or stars or uncapped:
-            set_players = []
-            if legends:
-                set_players.append(legends.pop(0))
-            elif stars:
-                set_players.append(stars.pop(0))
-                
-            for _ in range(4):
-                if stars:
-                    set_players.append(stars.pop(0))
-                elif uncapped:
-                    set_players.append(uncapped.pop(0))
-                    
-            for _ in range(5):
-                if uncapped:
-                    set_players.append(uncapped.pop(0))
-                elif stars:
-                    set_players.append(stars.pop(0))
-                    
-            # Shuffle the mini-set so the legend isn't ALWAYS the first player
-            random.shuffle(set_players)
-            self.cricket_players.extend(set_players)
-            
         self.current_player_index = -1
         update_room_status(self.room_id, 'auction')
         
