@@ -897,13 +897,20 @@ function playHornTone(freq, duration, delay) {
     osc.stop(audioCtx.currentTime + delay + duration);
 }
 
+const iplHornAudio = new Audio("/static/ipl_horn.webm");
+iplHornAudio.volume = 0.15;
+
 function playSoldSound() {
-    if(audioCtx.state === 'suspended') audioCtx.resume();
-    
-    // Heavy Gavel Thud (SOLD!)
+    if(audioCtx.state === "suspended") audioCtx.resume();
+    iplHornAudio.currentTime = 0;
+    iplHornAudio.play().catch(e => console.log("Audio play failed:", e));
+    setTimeout(() => {
+        iplHornAudio.pause();
+        iplHornAudio.currentTime = 0;
+    }, 4000);
     const thud = audioCtx.createOscillator();
     const gainThud = audioCtx.createGain();
-    thud.type = 'sine';
+    thud.type = "sine";
     thud.frequency.setValueAtTime(150, audioCtx.currentTime);
     thud.frequency.exponentialRampToValueAtTime(10, audioCtx.currentTime + 0.15);
     gainThud.gain.setValueAtTime(1.5 * GLOBAL_VOLUME, audioCtx.currentTime);
@@ -912,18 +919,8 @@ function playSoldSound() {
     gainThud.connect(audioCtx.destination);
     thud.start();
     thud.stop(audioCtx.currentTime + 0.15);
-
-    // The Famous Stadium "Charge!" Fanfare
-    // Notes: G4, C5, E5, G5... E5, G5!
-    playHornTone(392.00, 0.15, 0.2); // G4
-    playHornTone(523.25, 0.15, 0.35); // C5
-    playHornTone(659.25, 0.15, 0.5); // E5
-    playHornTone(783.99, 0.3, 0.65); // G5
-    playHornTone(659.25, 0.15, 1.0); // E5
-    playHornTone(783.99, 0.5, 1.15); // G5 (Hold)
 }
 
-function playBidSound() {
     if(audioCtx.state === 'suspended') audioCtx.resume();
     const osc = audioCtx.createOscillator();
     const gain = audioCtx.createGain();
