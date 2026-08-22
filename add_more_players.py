@@ -1,7 +1,7 @@
 import sqlite3
 import random
 
-names = ["Kumar Kushagra", "Sameer Rizvi", "Abhinav Manohar", "Sai Sudharsan", "N. Jagadeesan", "KS Bharat", "Lalit Yadav", "Aman Khan", "Pravin Dubey", "Yash Dhull", "Priyam Garg", "Anmolpreet Singh", "Vivrant Sharma", "Mayank Dagar", "Sanvir Singh", "Harpreet Singh Bhatia", "Shashank Singh", "Prerak Mankad", "Vicky Ostwal", "Abishek Porel", "Ricky Bhui", "Swastik Chikara", "Saurav Chauhan", "Avanish Rao Aravelly", "Luvnith Sisodia", "Aryan Juyal", "Bipin Saurabh", "BR Sharath", "Urvil Patel", "Vishnu Vinod", "Harvik Desai", "G Ajitesh", "Gourav Choudhary", "Bipin Saurabh", "Fazalhaq Farooqi", "Noor Ahmad", "Naveen-ul-Haq", "Mujeeb Ur Rahman"]
+names = ["Kumar Kushagra", "Sameer Rizvi", "Abhinav Manohar", "Sai Sudharsan", "Lalit Yadav", "Aman Khan", "Pravin Dubey", "Yash Dhull", "Priyam Garg", "Anmolpreet Singh", "Vivrant Sharma", "Mayank Dagar", "Sanvir Singh", "Harpreet Singh Bhatia", "Shashank Singh", "Prerak Mankad", "Vicky Ostwal", "Abishek Porel", "Ricky Bhui", "Swastik Chikara", "Saurav Chauhan", "Avanish Rao Aravelly", "Luvnith Sisodia", "Aryan Juyal", "Bipin Saurabh", "BR Sharath", "Urvil Patel", "Vishnu Vinod", "Harvik Desai", "G Ajitesh", "Gourav Choudhary", "Bipin Saurabh", "Fazalhaq Farooqi", "Noor Ahmad", "Naveen-ul-Haq", "Mujeeb Ur Rahman"]
 conn = sqlite3.connect('ipl_auction.db')
 cursor = conn.cursor()
 added = 0
