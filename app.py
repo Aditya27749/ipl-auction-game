@@ -38,6 +38,12 @@ if not players:
         logging.info("Applied highly accurate real-world stats to top players")
     except Exception as e:
         logger.error(f"Failed to apply real stats: {e}")
+        
+    try:
+        subprocess.run(["python", "add_legends.py"], check=True)
+        logging.info("Added historical IPL legends to the database")
+    except Exception as e:
+        logger.error(f"Failed to add legends: {e}")
 
 app = FastAPI(title="IPL Auction Arena")
 
