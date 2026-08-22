@@ -657,7 +657,7 @@ function updateMyTeam(team) {
     const div = document.createElement('div');
     div.className = 'roster-item';
     const roleColor = state.roleColors[p.role] || '#2196f3';
-    const isImpact = index === 11;
+    const isImpact = index === 14;
     div.innerHTML = `
       <div class="name">
         <span style="color: ${roleColor}">●</span> 
@@ -728,7 +728,7 @@ function renderResults(results) {
       teamHTML = '<div class="result-team-roster">';
       res.team.forEach((p, i) => {
         const roleColor = state.roleColors[p.role] || '#2196f3';
-        const isImpact = i === 11;
+        const isImpact = i === 14;
         teamHTML += `
           <div class="result-team-player">
             <span style="color:${roleColor}">●</span>

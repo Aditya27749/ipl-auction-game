@@ -146,7 +146,7 @@ class AuctionRoom:
         
         # Check if all teams are full or all players presented
         all_teams_full = all(
-            len(get_drafted_players(self.room_id, uid)) >= 12
+            len(get_drafted_players(self.room_id, uid)) >= 15
             for uid in self.players
         )
         
@@ -199,8 +199,8 @@ class AuctionRoom:
                 
             # Fetch user's current team from DB to validate roster constraints
             current_team = get_drafted_players(self.room_id, user_id)
-            if len(current_team) >= 12:
-                return False, "Roster is full (12 players max)"
+            if len(current_team) >= 15:
+                return False, "Roster is full (15 players max)"
                 
             current_player = self.cricket_players[self.current_player_index]
             
@@ -251,7 +251,7 @@ class AuctionRoom:
             
             self.pick_order += 1
             current_team = get_drafted_players(self.room_id, self.current_bidder)
-            is_impact = (len(current_team) == 11)  # 12th player is impact
+            is_impact = (len(current_team) == 14)  # 15th player is impact
             
             draft_player(self.room_id, self.current_bidder, current_player["id"], 
                          self.current_bid, self.pick_order, is_impact)
@@ -391,11 +391,11 @@ class AuctionRoom:
         # 1. Role Balance (2.0 pts)
         if roles.get('Wicket-Keeper', 0) >= 1:
             score += 0.5
-        if 3 <= roles.get('Batsman', 0) <= 5:
+        if 4 <= roles.get('Batsman', 0) <= 7:
             score += 0.5
-        if 3 <= roles.get('Bowler', 0) <= 5:
+        if 4 <= roles.get('Bowler', 0) <= 7:
             score += 0.5
-        if 1 <= roles.get('All-Rounder', 0) <= 3:
+        if 2 <= roles.get('All-Rounder', 0) <= 4:
             score += 0.5
 
         # 2. Star Power (2.5 pts)
@@ -403,15 +403,15 @@ class AuctionRoom:
         score += (avg_rating / 10.0) * 2.5
 
         # 3. Budget Efficiency (1.5 pts)
-        if len(team) == 12:
+        if len(team) == 15:
             score += 0.5
         efficiency = 1.0 - (remaining_budget / 100.0)
         score += max(0, min(1.0, efficiency))
 
         # 4. Team Composition (2.0 pts)
-        if overseas_count <= 4:
+        if overseas_count <= 5:
             score += 0.5
-        if len(team) == 12:
+        if len(team) == 15:
             score += 0.5
         if max_rating >= 8.0:
             score += 0.5
