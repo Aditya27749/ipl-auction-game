@@ -524,6 +524,11 @@ function renderNewPlayer(player, index, total) {
   els.auction.soldOverlay.classList.add('hidden');
   els.auction.unsoldOverlay.classList.add('hidden');
   els.auction.btnBid.disabled = false;
+  const quickBtns = document.querySelectorAll('.btn-quick-bid');
+  quickBtns.forEach(btn => {
+    btn.disabled = false;
+    btn.style.opacity = '1';
+  });
   
   // Update top bar
   els.auction.playerIndex.innerText = `Player ${index}/${total}`;
@@ -569,6 +574,18 @@ function updateBid(amount, bidderName, bidderId) {
   els.auction.currBidAmt.style.animation = 'none';
   els.auction.currBidAmt.offsetHeight; // trigger reflow
   els.auction.currBidAmt.style.animation = 'pulse 0.3s ease';
+  // Update quick bid buttons based on current bid
+  const quickBtns = document.querySelectorAll('.btn-quick-bid');
+  quickBtns.forEach(btn => {
+    const amt = parseFloat(btn.getAttribute('data-amount'));
+    if ((amount >= 3.0 && amt === 0.25) || (amount >= 6.0 && amt === 0.5)) {
+      btn.disabled = true;
+      btn.style.opacity = '0.3';
+    } else {
+      btn.disabled = false;
+      btn.style.opacity = '1';
+    }
+  });
   
   // Show who holds the bid
   if (bidderId === state.playerId) {

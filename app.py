@@ -34,10 +34,10 @@ if not players:
         logger.error(f"Failed to add additional 100 players: {e}")
         
     try:
-        subprocess.run(["python", "apply_real_stats.py"], check=True)
-        logging.info("Applied highly accurate real-world stats to top players")
+        subprocess.run(["python", "apply_cricsheet_stats.py"], check=True)
+        logging.info("Applied highly accurate Cricsheet real-world stats to all players")
     except Exception as e:
-        logger.error(f"Failed to apply real stats: {e}")
+        logger.error(f"Failed to apply Cricsheet stats: {e}")
         
     try:
         subprocess.run(["python", "add_legends.py"], check=True)
