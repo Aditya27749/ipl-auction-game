@@ -225,8 +225,8 @@ class AuctionRoom:
             
             overseas_count = sum(1 for p in current_team if p.get('nationality', '').lower() != 'indian')
             if current_player.get('nationality', '').lower() != 'indian':
-                if overseas_count >= 4:
-                    return False, "Maximum 4 overseas players allowed"
+                if overseas_count >= 6:
+                    return False, "Maximum 6 overseas players allowed"
 
             self.current_bid = amount
             self.current_bidder = user_id
@@ -428,7 +428,7 @@ class AuctionRoom:
         score += max(0, min(1.0, efficiency))
 
         # 4. Team Composition (2.0 pts)
-        if overseas_count <= 5:
+        if overseas_count <= 6:
             score += 0.5
         if len(team) == 15:
             score += 0.5
