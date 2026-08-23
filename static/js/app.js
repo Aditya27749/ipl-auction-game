@@ -923,6 +923,7 @@ function playSoldSound() {
     thud.stop(audioCtx.currentTime + 0.15);
 }
 
+function playBidSound() {
     if(audioCtx.state === 'suspended') audioCtx.resume();
     const osc = audioCtx.createOscillator();
     const gain = audioCtx.createGain();
@@ -941,7 +942,6 @@ function playSoldSound() {
     osc.start();
     osc.stop(audioCtx.currentTime + 0.15);
 }
-
 function playUnsoldSound() {
     if(audioCtx.state === 'suspended') audioCtx.resume();
     const osc = audioCtx.createOscillator();
