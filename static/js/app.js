@@ -359,6 +359,8 @@ function connectWebSocket() {
   };
   
   state.ws.onerror = (err) => {
+    showToast("Connection to game server lost or failed. Try refreshing.", "error");
+
     console.error("WS Error:", err);
   };
 }
