@@ -1007,3 +1007,9 @@ function playTickSound() {
     osc.start();
     osc.stop(audioCtx.currentTime + 0.05);
 }
+
+window.handleDestroyRoom = function() {
+    if (confirm("🚨 WARNING 🚨\\n\\nAre you sure you want to completely DESTROY this game?\\nThis will kick everyone out and delete the room forever!")) {
+        sendMessage({ type: "destroy_room" });
+    }
+};
