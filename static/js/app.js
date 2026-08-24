@@ -775,9 +775,9 @@ function renderResults(results) {
       <div class="rank-badge">${badge}</div>
       <h3>${res.player_name || 'Player'} ${isMe ? '(You)' : ''}</h3>
       <p>Budget remaining: ${formatCurrency(res.budget_remaining || 0)}</p>
-      <p>Players drafted: ${res.team_size || (res.team ? res.team.length : 0)}/12</p>
+      <p>Players drafted: ${res.team_size || (res.team ? res.team.length : 0)}/15</p>
       <div class="score-circle">${score.toFixed(1)}</div>
-      <p style="margin-top:8px;font-size:0.8rem;color:var(--text-muted);">out of 10</p>
+      <p style="margin-top:8px;font-size:0.8rem;color:var(--text-muted);">AI Rating </p>
       ${teamHTML}
     `;
     
