@@ -436,6 +436,6 @@ class AuctionRoom:
         rating_points = (avg_rating / 10.0) * 20.0
         score += rating_points
 
-        # Format cleanly out of 100
-        final_score = round(max(0.0, min(100.0, score)), 1)
+        # Format cleanly out of 10
+        final_score = round(max(0.0, min(10.0, score / 10.0)), 1)
         return final_score
