@@ -114,36 +114,58 @@ class AuctionRoom:
             pass
 
     async def start_auction(self, all_cricket_players: List[dict]):
-        """Shuffle players and begin the auction."""
+        """Shuffle players and begin the auction with cheat sheet loaded between 100-140."""
         if self.auction_active:
             return
             
         self.auction_active = True
         self.status = 'auction'
+        update_room_status(self.room_id, "auction")
+
         
-        # Sort all players by rating (highest first)
-        sorted_players = sorted(all_cricket_players, key=lambda x: x.get('rating', 0), reverse=True)
+        cheat_names = [
+            "Shikhar Dhawan", "Suresh Raina", "Gautam Gambhir", "Mayank Agarwal", "Keshav Maharaj",
+            "Shane Watson", "Yuvraj Singh", "Jacques Kallis", "Abhishek Nayar",
+            "Dinesh Karthik", "Aditya Tare",
+            "Bhuvneshwar Kumar", "Amit Mishra", "Sandeep Sharma", "Harbhajan Singh"
+        ]
         
-        # Take the top 120 players (All Legends and Main Stars)
-        main_players = sorted_players[:120]
+        cheat_players = []
+        regular_players = []
         
-        # Take the remaining players (Uncapped / Base Price)
-        remaining_players = sorted_players[120:]
+        for p in all_cricket_players:
+            if p.get('name') in cheat_names:
+                cheat_players.append(p)
+            else:
+                regular_players.append(p)
+                
+        # Sort regular players by rating
+        regular_players = sorted(regular_players, key=lambda x: x.get('rating', 0), reverse=True)
         
         import random
-        random.shuffle(main_players)
-        random.shuffle(remaining_players)
         
-        # Combine them so ALL main players appear in the first 120 slots!
-        self.cricket_players = main_players + remaining_players
+        # Phase 1: First 100 players (0 to 99) -> Highest rated regular players
+        phase1 = regular_players[:100]
+        random.shuffle(phase1)
         
-        self.current_player_index = -1
-        update_room_status(self.room_id, 'auction')
+        # Phase 2: Picks 100 to 140 -> Next 25 regular players + 15 Cheat Players (Total 40)
+        phase2_regulars = regular_players[100:125]
+        phase2 = phase2_regulars + cheat_players
+        random.shuffle(phase2)
         
-        # Send initial budgets along with auction start
-        budgets_data = {}
-        for uid, p in self.players.items():
-            budgets_data[uid] = {"name": p["name"], "budget": p["budget"]}
+        # Phase 3: Picks 140+ -> The rest
+        phase3 = regular_players[125:]
+        random.shuffle(phase3)
+        
+        # Combine
+        self.cricket_players = phase1 + phase2 + phase3
+        self.current_player_index = 0
+        
+        # Reset budgets and UI
+        for p in self.players.values():
+            p["budget"] = 120.0
+            
+        budgets_data = {uid: 120.0 for uid in self.players.keys()}
         
         await self.broadcast({
             "type": "auction_start",
