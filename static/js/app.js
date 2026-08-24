@@ -626,7 +626,12 @@ function updateBid(amount, bidderName, bidderId) {
 
 
 
+let lastBidTime = 0;
+
 function placeBid(amount) {
+  if (Date.now() - lastBidTime < 300) return;
+  lastBidTime = Date.now();
+
   if (!state.currentAuctionPlayer) return;
   
   // If no amount passed, calculate default increment
