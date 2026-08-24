@@ -99,6 +99,8 @@ function cacheDOMElements() {
       btnBid: document.getElementById('btn-place-bid'),
       btnSkip: document.getElementById('btn-skip-bid'),
       btnSell: document.getElementById('btn-sell-player'),
+      btnDestroy: document.getElementById("btn-destroy-game"),
+
       hostControls: document.getElementById('host-controls'),
       customBid: document.getElementById('custom-bid-input'),
       quickBids: document.querySelectorAll('.btn-quick-bid'),
@@ -178,6 +180,12 @@ function bindEvents() {
   
   // Sell button sends sell command
   if(els.auction.btnSell) {
+    if (els.auction.btnDestroy) els.auction.btnDestroy.addEventListener("click", () => {
+      if (confirm("🚨 WARNING 🚨\n\nAre you sure you want to completely DESTROY this game?\nThis will kick everyone out and delete the room forever!")) {
+        sendMessage({ type: "destroy_room" });
+      }
+    });
+
     els.auction.btnSell.addEventListener('click', () => {
       console.log('SELL button clicked! Sending message to server...');
       sendMessage({ type: 'sell_player' });
@@ -443,6 +451,13 @@ function handleWsMessage(msg) {
         updateMyTeam(msg.team);
       }
       break;
+    case "room_destroyed":
+      showToast(msg.message || "The host has destroyed the room.", "error");
+      setTimeout(() => {
+        disconnectWs();
+      }, 2000);
+      break;
+
     case 'auction_end':
       renderResults(msg.results);
       break;
