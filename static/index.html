@@ -133,10 +133,14 @@
         <span class="topbar-room-code" id="auction-room-code">------</span>
         <span class="topbar-player-index" id="player-index">Player 0/0</span>
       </div>
+
       <div class="topbar-progress">
         <div class="progress-bar">
           <div class="progress-fill" id="auction-progress"></div>
         </div>
+      </div>
+      <div class="topbar-right" style="margin-left: 20px;">
+        <button id="btn-destroy-game" class="btn btn-danger hidden" style="font-size: 0.8rem; padding: 0.4rem 0.8rem; background: var(--danger-red);">EXIT</button>
       </div>
     </div>
 
@@ -216,7 +220,6 @@
           <div class="host-controls" id="host-controls" style="display: none; margin-top: 1rem; display: flex; flex-wrap: wrap; gap: 0.5rem; width: 100%;">
             <button id="btn-skip-bid" class="btn btn-secondary" style="flex: 1;">SKIP ⏭</button>
             <button id="btn-sell-player" class="btn btn-primary" style="flex: 1; background: var(--success-green); color: white;">SELL 🔨</button>
-            <button id="btn-destroy-game" class="btn btn-danger" style="flex: 1; background: var(--danger-red); margin-top: 0.5rem; width: 100%;">DESTROY GAME 🧨</button>
 
           </div>
         </div>

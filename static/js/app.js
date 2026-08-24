@@ -402,6 +402,8 @@ function handleWsMessage(msg) {
       if (msg.budgets) updateAllBudgets(msg.budgets);
       if (state.isHost && els.auction.hostControls) {
           els.auction.hostControls.style.display = 'flex';
+          if (els.auction.btnDestroy) els.auction.btnDestroy.classList.remove("hidden");
+
       }
       addLogEntry('🏏 Auction started! Let the bidding begin!');
       break;
@@ -491,6 +493,8 @@ function updateLobby(players) {
     if (state.isHost) {
       showToast('You are now the host!', 'success');
       if (els.auction.hostControls) els.auction.hostControls.style.display = 'flex';
+          if (els.auction.btnDestroy) els.auction.btnDestroy.classList.remove("hidden");
+
       els.lobby.btnStart.classList.remove('hidden');
     }
   }
