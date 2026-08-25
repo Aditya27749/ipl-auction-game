@@ -100,6 +100,9 @@ function cacheDOMElements() {
       btnSkip: document.getElementById('btn-skip-bid'),
       btnSell: document.getElementById('btn-sell-player'),
       btnDestroy: document.getElementById("btn-destroy-game"),
+      btnJump: document.getElementById("btn-jump-player"),
+      inputSearch: document.getElementById("host-search-player"),
+
 
       hostControls: document.getElementById('host-controls'),
       customBid: document.getElementById('custom-bid-input'),
@@ -185,6 +188,18 @@ function bindEvents() {
         sendMessage({ type: "destroy_room" });
       }
     });
+
+    if (els.auction.btnJump && els.auction.inputSearch) {
+      els.auction.btnJump.addEventListener("click", () => {
+        const searchName = els.auction.inputSearch.value.trim();
+        if (!searchName) return showToast("Enter a player name first", "error");
+        sendMessage({ type: "jump_player", name: searchName });
+        els.auction.inputSearch.value = "";
+      });
+      els.auction.inputSearch.addEventListener("keydown", (e) => {
+        if (e.key === "Enter") els.auction.btnJump.click();
+      });
+    }
 
     els.auction.btnSell.addEventListener('click', () => {
       console.log('SELL button clicked! Sending message to server...');
@@ -463,6 +478,10 @@ function handleWsMessage(msg) {
     case 'auction_end':
       renderResults(msg.results);
       break;
+    case "success":
+      showToast(msg.message, "success");
+      break;
+
     case 'error':
       showToast(msg.message, 'error');
       break;
