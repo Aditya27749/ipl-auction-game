@@ -114,7 +114,7 @@ class AuctionRoom:
             pass
 
     async def start_auction(self, all_cricket_players: List[dict]):
-        """Shuffle players and begin the auction with cheat sheet loaded between 100-140."""
+        """Shuffle players and begin the auction with cheat sheet loaded between 150-200."""
         if self.auction_active:
             return
             
@@ -144,17 +144,17 @@ class AuctionRoom:
         
         import random
         
-        # Phase 1: First 100 players (0 to 99) -> Highest rated regular players
-        phase1 = regular_players[:100]
+        # Phase 1: First 150 players (0 to 149) -> Highest rated regular players
+        phase1 = regular_players[:150]
         random.shuffle(phase1)
         
-        # Phase 2: Picks 100 to 140 -> Next 25 regular players + 15 Cheat Players (Total 40)
-        phase2_regulars = regular_players[100:125]
+        # Phase 2: Picks 150 to 200 -> Next 35 regular players + 15 Cheat Players (Total 50)
+        phase2_regulars = regular_players[150:185]
         phase2 = phase2_regulars + cheat_players
         random.shuffle(phase2)
         
-        # Phase 3: Picks 140+ -> The rest
-        phase3 = regular_players[125:]
+        # Phase 3: Picks 200+ -> The rest
+        phase3 = regular_players[185:]
         random.shuffle(phase3)
         
         # Combine
