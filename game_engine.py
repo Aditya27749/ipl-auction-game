@@ -444,10 +444,10 @@ class AuctionRoom:
             total_wickets += p.get('wickets', 0)
 
         # 1. Base Structure (Max 25 Points)
-        # Ideal: 5 BAT, 4 BWL, 4 AR, 2 WK
+        # Ideal: 5 BAT, 5 BWL, 3 AR, 2 WK
         bat_penalty = abs(5 - roles.get('Batsman', 0)) * 2
-        bwl_penalty = abs(4 - roles.get('Bowler', 0)) * 2
-        ar_penalty = abs(4 - roles.get('All-Rounder', 0)) * 2
+        bwl_penalty = abs(5 - roles.get("Bowler", 0)) * 2
+        ar_penalty = abs(3 - roles.get("All-Rounder", 0)) * 2
         wk_penalty = abs(2 - roles.get('Wicket-Keeper', 0)) * 3
         
         structure_score = 25 - (bat_penalty + bwl_penalty + ar_penalty + wk_penalty)
