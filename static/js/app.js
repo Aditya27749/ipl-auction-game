@@ -751,11 +751,25 @@ function updateAllBudgets(budgets) {
     const isMe = playerId === state.playerId;
     const div = document.createElement('div');
     div.className = `budget-pill ${isMe ? 'is-me' : ''}`;
+    div.style.flexDirection = 'column';
+    div.style.alignItems = 'stretch';
+    div.style.borderRadius = '8px';
+    div.style.gap = '4px';
+    
     const name = typeof data === 'object' ? data.name : 'Player';
     const budget = typeof data === 'object' ? data.budget : data;
+    const players = typeof data === 'object' && data.players !== undefined ? data.players : 0;
+    const overseas = typeof data === 'object' && data.overseas !== undefined ? data.overseas : 0;
+    
     div.innerHTML = `
-      ${name} ${isMe ? '(You)' : ''}
-      <span>${formatCurrency(budget)}</span>
+      <div style="display: flex; justify-content: space-between; width: 100%;">
+        <span style="font-weight: bold;">${name} ${isMe ? '(You)' : ''}</span>
+        <span style="color: var(--primary-gold); font-weight: bold;">${formatCurrency(budget)}</span>
+      </div>
+      <div style="display: flex; justify-content: space-between; width: 100%; font-size: 0.75rem; color: var(--text-muted);">
+        <span>Players: <span style="color: ${players >= 15 ? 'var(--success-green)' : '#fff'}">${players}/15</span></span>
+        <span>Foreign: <span style="color: ${overseas >= 6 ? 'var(--danger-red)' : '#fff'}">${overseas}/6</span></span>
+      </div>
     `;
     els.auction.allBudgets.appendChild(div);
   }

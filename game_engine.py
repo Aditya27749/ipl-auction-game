@@ -327,7 +327,13 @@ class AuctionRoom:
                 # Send updated budgets to all players
                 budgets_data = {}
                 for uid, p in self.players.items():
-                    budgets_data[uid] = {"name": p["name"], "budget": p["budget"]}
+                    uid_team = get_drafted_players(self.room_id, uid)
+                    budgets_data[uid] = {
+                        "name": p["name"], 
+                        "budget": p["budget"],
+                        "players": len(uid_team),
+                        "overseas": sum(1 for pl in uid_team if pl.get("nationality", "").lower() != "indian")
+                    }
                 
                 await self.broadcast({
                     "type": "budget_update",
