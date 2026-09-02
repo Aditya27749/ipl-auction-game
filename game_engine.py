@@ -114,7 +114,7 @@ class AuctionRoom:
             pass
 
     async def start_auction(self, all_cricket_players: List[dict]):
-        """Shuffle players and begin the auction with cheat sheet loaded between 150-200."""
+        """Shuffle players and begin the auction with cheat sheet loaded between 200-250."""
         if self.auction_active:
             return
             
@@ -124,10 +124,10 @@ class AuctionRoom:
 
         
         cheat_names = [
-            "Shikhar Dhawan", "Suresh Raina", "Gautam Gambhir", "Mayank Agarwal", "Keshav Maharaj",
-            "Shane Watson", "Yuvraj Singh", "Jacques Kallis", "Abhishek Nayar",
+            "Shikhar Dhawan", "David Warner", "Suresh Raina", "Gautam Gambhir", "Shubman Gill",
+            "Shane Watson", "Jacques Kallis", "Abhishek Nayar",
             "Dinesh Karthik", "Aditya Tare",
-            "Bhuvneshwar Kumar", "Amit Mishra", "Sandeep Sharma", "Harbhajan Singh"
+            "Bhuvneshwar Kumar", "Yuzvendra Chahal", "Ravichandran Ashwin", "Amit Mishra", "Sandeep Sharma"
         ]
         
         cheat_players = []
@@ -144,17 +144,17 @@ class AuctionRoom:
         
         import random
         
-        # Phase 1: First 150 players (0 to 149) -> Highest rated regular players
-        phase1 = regular_players[:150]
+        # Phase 1: First 200 players (0 to 199) -> Highest rated regular players
+        phase1 = regular_players[:200]
         random.shuffle(phase1)
         
-        # Phase 2: Picks 150 to 200 -> Next 35 regular players + 15 Cheat Players (Total 50)
-        phase2_regulars = regular_players[150:185]
+        # Phase 2: Picks 200 to 250 -> Next 35 regular players + 15 Cheat Players (Total 50)
+        phase2_regulars = regular_players[200:235]
         phase2 = phase2_regulars + cheat_players
         random.shuffle(phase2)
         
-        # Phase 3: Picks 200+ -> The rest
-        phase3 = regular_players[185:]
+        # Phase 3: Picks 250+ -> The rest
+        phase3 = regular_players[235:]
         random.shuffle(phase3)
         
         # Combine
