@@ -475,17 +475,13 @@ class AuctionRoom:
         expected_championship_runs = 25000.0
         expected_championship_wickets = 800.0
         
-        runs_points = min(25.0, (total_runs / expected_championship_runs) * 25.0)
-        wickets_points = min(25.0, (total_wickets / expected_championship_wickets) * 25.0)
+        runs_points = min(35.0, (total_runs / expected_championship_runs) * 35.0)
+        wickets_points = min(35.0, (total_wickets / expected_championship_wickets) * 35.0)
         
         score += runs_points
         score += wickets_points
 
-        # 4. Star Power & Rating Synergy (Max 20 Points)
-        # Captures intangible factors (strike rate aura, captaincy, etc.)
-        avg_rating = total_rating / len(team)
-        rating_points = (avg_rating / 10.0) * 20.0
-        score += rating_points
+
 
         # Format cleanly out of 10
         final_score = round(max(0.0, min(10.0, score / 10.0)), 1)
