@@ -123,19 +123,25 @@ class AuctionRoom:
         update_room_status(self.room_id, "auction")
 
         
-        cheat_names = [
-            "Shikhar Dhawan", "David Warner", "Suresh Raina", "Gautam Gambhir", "Shubman Gill",
+        cheat_batsmen_names = [
+            "Shikhar Dhawan", "David Warner", "Suresh Raina", "Gautam Gambhir", "Shubman Gill"
+        ]
+        cheat_other_names = [
             "Shane Watson", "Jacques Kallis", "Abhishek Nayar",
             "Dinesh Karthik", "Aditya Tare",
             "Bhuvneshwar Kumar", "Yuzvendra Chahal", "Ravichandran Ashwin", "Amit Mishra", "Sandeep Sharma"
         ]
         
-        cheat_players = []
+        cheat_batsmen = []
+        cheat_others = []
         regular_players = []
         
         for p in all_cricket_players:
-            if p.get('name') in cheat_names:
-                cheat_players.append(p)
+            name = p.get('name')
+            if name in cheat_batsmen_names:
+                cheat_batsmen.append(p)
+            elif name in cheat_other_names:
+                cheat_others.append(p)
             else:
                 regular_players.append(p)
                 
@@ -144,21 +150,26 @@ class AuctionRoom:
         
         import random
         
-        # Phase 1: First 200 players (0 to 199) -> Highest rated regular players
+        # Phase 1: Picks 0 to 199 -> Highest rated regular players
         phase1 = regular_players[:200]
         random.shuffle(phase1)
         
-        # Phase 2: Picks 200 to 250 -> Next 35 regular players + 15 Cheat Players (Total 50)
-        phase2_regulars = regular_players[200:235]
-        phase2 = phase2_regulars + cheat_players
+        # Phase 2: Picks 200 to 249 -> Next 40 regular players + 10 Cheat Others (Total 50)
+        phase2_regulars = regular_players[200:240]
+        phase2 = phase2_regulars + cheat_others
         random.shuffle(phase2)
         
-        # Phase 3: Picks 250+ -> The rest
-        phase3 = regular_players[235:]
+        # Phase 3: Picks 250 to 274 -> Next 20 regular players + 5 Cheat Batsmen (Total 25)
+        phase3_regulars = regular_players[240:260]
+        phase3 = phase3_regulars + cheat_batsmen
         random.shuffle(phase3)
         
+        # Phase 4: Picks 275+ -> The rest
+        phase4 = regular_players[260:]
+        random.shuffle(phase4)
+        
         # Combine
-        self.cricket_players = phase1 + phase2 + phase3
+        self.cricket_players = phase1 + phase2 + phase3 + phase4
         self.current_player_index = 0
         
         # Reset budgets and UI
