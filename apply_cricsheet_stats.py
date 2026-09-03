@@ -1448,3 +1448,10 @@ else:
     """)
 conn.commit()
 conn.close()
+
+# Fix Manish Pandey's Role
+conn = sqlite3.connect('ipl_auction.db')
+cursor = conn.cursor()
+cursor.execute("UPDATE players SET role='Batsman' WHERE name='Manish Pandey';")
+conn.commit()
+conn.close()
