@@ -181,7 +181,7 @@ class AuctionRoom:
         self.current_player_index = 0
         
         # Assign teams and secret captains
-        franchises = ["Chennai Super Kings", "Mumbai Indians", "Royal Challengers Bangalore", "Kolkata Knight Riders", "Rajasthan Royals", "Sunrisers Hyderabad", "Delhi Capitals", "Punjab Kings", "Gujarat Titans", "Lucknow Super Giants"]
+        franchises = ["Chennai Super Kings", "Mumbai Indians", "Royal Challengers Bangalore", "Kolkata Knight Riders", "Rajasthan Royals", "Sunrisers Hyderabad", "Delhi Capitals", "Punjab Kings", "Gujarat Titans", "Lucknow Super Giants", "Deccan Chargers", "Pune Warriors India", "Kochi Tuskers Kerala", "Gujarat Lions", "Rising Pune Supergiant", "Sydney Sixers", "Perth Scorchers", "Trinbago Knight Riders", "Barbados Royals", "MI Cape Town"]
         import random
         random.shuffle(franchises)
         
