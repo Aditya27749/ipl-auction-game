@@ -53,6 +53,14 @@ class AuctionRoom:
                     "budgets": budgets_data
                 })
                 
+                # Resend secret mission
+                if "secret_captain" in player_info:
+                    await player_info["ws"].send_json({
+                        "type": "secret_mission",
+                        "ipl_team": player_info.get("ipl_team"),
+                        "secret_captain": player_info.get("secret_captain")
+                    })
+                
                 # 2. Current player
                 if 0 <= self.current_player_index < len(self.cricket_players):
                     current_player = self.cricket_players[self.current_player_index]
@@ -343,7 +351,8 @@ class AuctionRoom:
                         "name": p["name"], 
                         "budget": p["budget"],
                         "players": len(uid_team),
-                        "overseas": sum(1 for pl in uid_team if pl.get("nationality", "").lower() != "indian")
+                        "overseas": sum(1 for pl in uid_team if pl.get("nationality", "").lower() != "indian"),
+                        "ipl_team": p.get("ipl_team", "Unknown")
                     }
                 
                 await self.broadcast({
@@ -402,7 +411,7 @@ class AuctionRoom:
         results = []
         for user_id, player_info in self.players.items():
             team = get_drafted_players(self.room_id, user_id)
-            score = self.calculate_team_scores(team, player_info["budget"])
+            score = self.calculate_team_scores(team, player_info["budget"], player_info.get("secret_captain"))
             update_team_score(self.room_id, user_id, score)
             
             # Normalize team for frontend
@@ -434,7 +443,7 @@ class AuctionRoom:
             "results": results
         })
 
-    def calculate_team_scores(self, team: List[dict], remaining_budget: float) -> float:
+    def calculate_team_scores(self, team: List[dict], remaining_budget: float, secret_captain: str = None) -> float:
         """Advanced AI-Predictor algorithm for team points."""
         if not team:
             return 0.0
@@ -496,4 +505,12 @@ class AuctionRoom:
 
         # Format cleanly out of 10
         final_score = round(max(0.0, min(10.0, score / 10.0)), 1)
+        
+        # Secret Captain Bonus (Can break the 10.0 limit!)
+        if secret_captain:
+            for p in team:
+                if p["name"] == secret_captain:
+                    final_score += 0.5
+                    break
+                    
         return final_score

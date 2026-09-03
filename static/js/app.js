@@ -422,6 +422,15 @@ function handleWsMessage(msg) {
       }
       addLogEntry('🏏 Auction started! Let the bidding begin!');
       break;
+    case 'secret_mission':
+      const card = document.getElementById('secret-mission-card');
+      if (card) {
+          card.style.display = 'block';
+          document.getElementById('my-franchise-name').innerText = msg.ipl_team;
+          document.getElementById('my-secret-captain').innerText = msg.secret_captain;
+      }
+      showToast(`🕵️ SECRET MISSION: You are ${msg.ipl_team}. Draft ${msg.secret_captain} for a +0.5 score bonus!`, 'success', 8000);
+      break;
     case 'new_player':
       renderNewPlayer(msg.player, msg.index, msg.total);
       break;
