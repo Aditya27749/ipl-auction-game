@@ -1430,3 +1430,21 @@ for name, stats in superstars3.items():
     """, (stats["matches"], stats["runs"], stats["wickets"], stats["batting_avg"], stats["strike_rate"], name))
 conn.commit()
 conn.close()
+
+# Add Ajinkya Rahane (missing from initial seed)
+conn = sqlite3.connect('ipl_auction.db')
+cursor = conn.cursor()
+cursor.execute("SELECT id FROM players WHERE name = 'Ajinkya Rahane'")
+if not cursor.fetchone():
+    cursor.execute("""
+        INSERT INTO players (name, nationality, role, bowling_style, ipl_team, matches, runs, wickets, batting_avg, bowling_avg, strike_rate, economy, base_price, rating)
+        VALUES ('Ajinkya Rahane', 'Indian', 'Batsman', 'None', 'CSK', 185, 4642, 1, 30.2, 5.0, 123.4, 5.0, 1.5, 8.5)
+    """)
+else:
+    cursor.execute("""
+        UPDATE players 
+        SET matches=185, runs=4642, wickets=1, batting_avg=30.2, strike_rate=123.4
+        WHERE name='Ajinkya Rahane'
+    """)
+conn.commit()
+conn.close()
