@@ -769,10 +769,11 @@ function updateAllBudgets(budgets) {
     const budget = typeof data === 'object' ? data.budget : data;
     const players = typeof data === 'object' && data.players !== undefined ? data.players : 0;
     const overseas = typeof data === 'object' && data.overseas !== undefined ? data.overseas : 0;
+    const teamName = typeof data === 'object' && data.ipl_team ? data.ipl_team : '';
     
     div.innerHTML = `
       <div style="display: flex; justify-content: space-between; width: 100%;">
-        <span style="font-weight: bold;">${name} ${isMe ? '(You)' : ''}</span>
+        <span style="font-weight: bold;">${name} <span style="font-size:0.7rem; color:#00d4ff;">${teamName ? '[' + teamName.split(' ').map(w=>w[0]).join('') + ']' : ''}</span> ${isMe ? '(You)' : ''}</span>
         <span style="color: var(--primary-gold); font-weight: bold;">${formatCurrency(budget)}</span>
       </div>
       <div style="display: flex; justify-content: space-between; width: 100%; font-size: 0.75rem; color: var(--text-muted);">
