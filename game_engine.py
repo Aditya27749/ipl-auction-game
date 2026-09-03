@@ -196,12 +196,11 @@ class AuctionRoom:
             p["secret_captain"] = captain_names[i % len(captain_names)]
             
             if p.get("ws"):
-                import asyncio
-                asyncio.create_task(p["ws"].send_json({
+                await p["ws"].send_json({
                     "type": "secret_mission",
                     "ipl_team": p["ipl_team"],
                     "secret_captain": p["secret_captain"]
-                }))
+                })
             
         budgets_data = {}
         for uid, p in self.players.items():
