@@ -43,11 +43,11 @@
 "Iqbal Abdulla",All-Rounder,Indian,1.0,8.7,48,88,40
 "Irfan Pathan",All-Rounder,Indian,1.0,8.7,66,935,32
 "Mayank Agarwal",Batsman,Indian,2.0,8.7,81,3312,0
-"Munaf Patel",Bowler,Indian,0.5,8.7,20,112,92
+"Munaf Patel",Bowler,Indian,0.5,8.7,63,39,74
 "RP Singh",Bowler,Indian,1.5,8.7,82,52,90
 "Rishi Dhawan",All-Rounder,Indian,1.5,8.7,37,210,25
 "Baba Indrajith",Wicket-Keeper,Indian,2.0,8.6,3,21,0
-"Chris Lynn",Batsman,Overseas,1.5,8.6,34,1930,0
+"Chris Lynn",Batsman,Overseas,1.5,8.6,42,1329,0
 "Daniel Christian",All-Rounder,Overseas,1.0,8.6,86,1429,37
 "Darren Sammy",All-Rounder,Overseas,0.5,8.6,22,1707,49
 "Dwayne Bravo",All-Rounder,Overseas,1.0,8.6,86,1192,49
@@ -63,7 +63,7 @@
 "Dasun Shanaka",All-Rounder,Overseas,1.0,8.5,148,1735,44
 "David Hussey",All-Rounder,Overseas,1.0,8.5,114,583,65
 "Hardik Pandya",All-Rounder,Indian,2.0,8.5,137,2525,64
-"Imran Tahir",Bowler,Overseas,1.0,8.5,59,33,82
+"Imran Tahir",Bowler,Overseas,1.0,8.5,59,20,82
 "Jofra Archer",Bowler,Overseas,2.0,8.5,40,195,48
 "Jos Buttler",Wicket-Keeper,Overseas,2.0,8.5,90,3200,0
 "KL Rahul",Wicket-Keeper,Indian,2.0,8.5,132,4683,0
@@ -144,7 +144,7 @@ Sreesanth,Bowler,Indian,1.0,8.4,71,281,58
 "Shivam Dube",All-Rounder,Indian,1.0,8.0,84,2009,6
 "Shreyas Iyer",Batsman,Indian,1.5,8.0,115,3127,0
 "Sunil Narine",All-Rounder,Overseas,1.5,8.0,176,1534,180
-"Travis Head",Batsman,Overseas,1.5,8.0,20,600,2
+"Travis Head",Batsman,Overseas,1.5,8.0,30,900,2
 "Trent Boult",Bowler,Overseas,1.5,8.0,80,40,100
 "Tristan Stubbs",Wicket-Keeper,Overseas,1.0,8.0,39,930,4
 "Vidwath Kaverappa",Bowler,Indian,1.5,8.0,1,0,2
@@ -190,7 +190,7 @@ Sreesanth,Bowler,Indian,1.0,8.4,71,281,58
 "Baba Aparajith",All-Rounder,Indian,2.0,7.6,104,1821,53
 "Mitchell Johnson",Bowler,Overseas,2.0,7.6,112,140,108
 "Navdeep Saini",All-Rounder,Indian,1.0,7.6,32,33,24
-"Piyush Chawla",Bowler,Indian,0.5,7.6,73,133,48
+"Piyush Chawla",Bowler,Indian,0.5,7.6,192,613,192
 "Pravin Tambe",Bowler,Indian,2.0,7.6,21,291,69
 "Rasikh Salam",Bowler,Indian,1.5,7.6,18,40,16
 "Shamar Joseph",Bowler,Overseas,1.5,7.6,1,0,0
@@ -314,14 +314,14 @@ Sreesanth,Bowler,Indian,1.0,8.4,71,281,58
 "Mahipal Lomror",Bowler,Indian,0.5,6.8,64,490,118
 "Reece Topley",Batsman,Overseas,1.0,6.8,31,2982,4
 "Vicky Ostwal",All-Rounder,Indian,1.0,6.8,109,2439,52
-"Colin Munro",Batsman,Overseas,2.0,6.7,12,177,0
+"Colin Munro",Batsman,Overseas,2.0,6.7,13,177,0
 "Liam Plunkett",Bowler,Overseas,0.5,6.7,148,481,147
 "Lungi Ngidi",Bowler,Overseas,1.5,6.7,22,3,36
 "Matt Henry",Batsman,Overseas,1.5,6.7,87,571,1
 "T Natarajan",Bowler,Indian,2.0,6.7,72,4,73
 "Glenn Phillips",Batsman,Overseas,1.0,6.6,47,3222,3
 "Ishant Sharma",Bowler,Indian,2.0,6.6,117,57,96
-"Martin Guptill",Bowler,Overseas,1.5,6.6,112,152,132
+"Martin Guptill",Bowler,Overseas,1.5,6.6,13,270,0
 "Tom Curran",Batsman,Overseas,2.0,6.6,29,3975,4
 "Alex Hales",Bowler,Overseas,2.0,6.5,34,416,113
 "Avesh Khan",Bowler,Indian,0.5,6.5,80,68,92
