@@ -1455,3 +1455,14 @@ cursor = conn.cursor()
 cursor.execute("UPDATE players SET role='Batsman' WHERE name='Manish Pandey';")
 conn.commit()
 conn.close()
+
+# Fix Kane Williamson
+conn = sqlite3.connect('ipl_auction.db')
+cursor = conn.cursor()
+cursor.execute("""
+    UPDATE players 
+    SET matches=77, runs=2101, wickets=0, batting_avg=36.2, strike_rate=126.0, role='Batsman'
+    WHERE name='Kane Williamson'
+""")
+conn.commit()
+conn.close()
