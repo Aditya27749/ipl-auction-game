@@ -139,9 +139,14 @@ class AuctionRoom:
             "Dinesh Karthik", "Aditya Tare",
             "Bhuvneshwar Kumar", "Yuzvendra Chahal", "Ravichandran Ashwin", "Amit Mishra", "Sandeep Sharma"
         ]
+        backup_cheat_names = [
+            "Andre Russell", "Nitish Rana", "Rahul Tripathi", 
+            "Kieron Pollard", "Ishan Kishan", "Trent Boult", "Mohammed Shami"
+        ]
         
         cheat_batsmen = []
         cheat_others = []
+        backup_cheats = []
         regular_players = []
         
         for p in all_cricket_players:
@@ -150,6 +155,8 @@ class AuctionRoom:
                 cheat_batsmen.append(p)
             elif name in cheat_other_names:
                 cheat_others.append(p)
+            elif name in backup_cheat_names:
+                backup_cheats.append(p)
             else:
                 regular_players.append(p)
                 
@@ -172,12 +179,21 @@ class AuctionRoom:
         phase3 = phase3_regulars + cheat_batsmen
         random.shuffle(phase3)
         
-        # Phase 4: Picks 275+ -> The rest
-        phase4 = regular_players[260:]
+        # Phase 4: Picks 275 to 299 -> Next 25 regular players (Total 25)
+        phase4 = regular_players[260:285]
         random.shuffle(phase4)
+
+        # Phase 5: Picks 300 to 310 -> Next 4 regular + 7 Backup Cheats (Total 11)
+        phase5_regulars = regular_players[285:289]
+        phase5 = phase5_regulars + backup_cheats
+        random.shuffle(phase5)
+
+        # Phase 6: Picks 311+ -> The rest
+        phase6 = regular_players[289:]
+        random.shuffle(phase6)
         
         # Combine
-        self.cricket_players = phase1 + phase2 + phase3 + phase4
+        self.cricket_players = phase1 + phase2 + phase3 + phase4 + phase5 + phase6
         self.current_player_index = 0
         
         # Assign teams and secret captains
