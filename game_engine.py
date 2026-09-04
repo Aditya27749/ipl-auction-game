@@ -91,6 +91,8 @@ class AuctionRoom:
                         "nationality": t.get("nationality", "Indian"),
                         "bought_price": t.get("price_paid", 0),
                         "ipl_team": t.get("ipl_team", ""),
+                        "strike_rate": t.get("strike_rate", 0),
+                        "economy": t.get("economy", 0),
                     })
                 await player_info["ws"].send_json({
                     "type": "team_update",
@@ -425,6 +427,8 @@ class AuctionRoom:
                         "nationality": t.get("nationality", "Indian"),
                         "bought_price": t.get("price_paid", 0),
                         "ipl_team": t.get("ipl_team", ""),
+                        "strike_rate": t.get("strike_rate", 0),
+                        "economy": t.get("economy", 0),
                     })
                 
                 if buyer_info["ws"]:
@@ -477,6 +481,8 @@ class AuctionRoom:
                     "nationality": t.get("nationality", "Indian"),
                     "bought_price": t.get("price_paid", 0),
                     "ipl_team": t.get("ipl_team", ""),
+                    "strike_rate": t.get("strike_rate", 0),
+                    "economy": t.get("economy", 0),
                     "rating": t.get("rating", 5.0),
                 })
             
