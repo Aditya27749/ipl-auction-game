@@ -124,6 +124,7 @@
         <ul style="padding-left: 1.2rem; margin-bottom: 0; font-size: 0.85rem; color: #cbd5e1; line-height: 1.5;">
           <li style="margin-bottom: 0.4rem;"><strong>Perfect 15:</strong> Exactly 5 Batsmen, 3 All-Rounders, 5 Bowlers, and 2 Wicket Keepers (Max 6 Overseas).</li>
           <li style="margin-bottom: 0.4rem;"><strong>Budget:</strong> You have 120 CR. Once you run out, you cannot bid!</li>
+          <li style="margin-bottom: 0.4rem;"><strong>Stats Target:</strong> Maintain an Average Strike Rate <strong>>= 133.0</strong> and Economy <strong><= 8.00</strong> or face a huge penalty!</li>
           <li><strong>Victory Condition:</strong> The AI scores your team out of 10. To win, draft players with the <strong>most total runs</strong> and <strong>most total wickets</strong>!</li>
           <li style="margin-top: 0.4rem;"><strong>🕵️ Secret Mission:</strong> Draft your assigned Secret Target to gain a massive <strong>+0.5 Bonus Point</strong> to your final score!</li>
 
@@ -285,6 +286,10 @@
             <span>Slots: <strong><span id="slots-filled">0</span>/15</strong></span>
             <span>Overseas: <strong><span id="overseas-filled">0</span>/6</strong></span>
           </div>
+          <div class="team-stats-row" style="margin-top: 5px;">
+            <span>Avg SR: <strong><span id="team-sr-display">0.0</span></strong></span>
+            <span>Avg Econ: <strong><span id="team-econ-display">0.0</span></strong></span>
+          </div>
           <div id="secret-mission-card" style="margin-top: 15px; padding: 10px; background: rgba(0, 212, 255, 0.1); border-left: 3px solid #00d4ff; border-radius: 4px; display: none;">
             <div style="font-size: 0.75rem; color: #00d4ff; font-weight: bold; text-transform: uppercase;">Your Franchise</div>
             <div id="my-franchise-name" style="font-size: 1rem; font-weight: bold; margin-bottom: 8px; color: white;">CSK</div>
@@ -339,6 +344,6 @@
     </div>
   </div>
 
-  <script src="js/app.js?v=9"></script>
+  <script src="js/app.js?v=10"></script>
 </body>
 </html>
