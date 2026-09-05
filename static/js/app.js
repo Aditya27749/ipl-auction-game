@@ -169,7 +169,10 @@ function bindEvents() {
   // Lobby
   els.lobby.roomCodeCopy.addEventListener('click', () => copyToClipboard(state.roomCode));
   els.lobby.btnStart.addEventListener('click', handleStartAuction);
-  els.lobby.btnLeave.addEventListener('click', disconnectWs);
+  els.lobby.btnLeave.addEventListener('click', () => {
+    sendMessage({ type: 'leave_room' });
+    setTimeout(() => disconnectWs(), 200);
+  });
   
   // Auction - Place Bid button
   els.auction.btnBid.addEventListener('click', () => placeBid(null));

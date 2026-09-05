@@ -238,6 +238,15 @@ async def websocket_endpoint(websocket: WebSocket, room_code: str, player_id: st
                 else:
                     logger.warning(f"Unauthorized sell attempt from {player_id} (host is {room_data['host_id']})")
                     
+            elif msg_type == "leave_room":
+                logger.info(f"Player {player_id} intentionally left room {room_code}")
+                if player_id in room.players:
+                    del room.players[player_id]
+                    remove_player_from_room(room_code, player_id)
+                room_data = get_room(room_code)
+                if room_data:
+                    await broadcast_lobby_update(room, room_data['host_id'])
+                    
             elif msg_type == "kick_player":
                 room_data = get_room(room_code)
                 if room_data['host_id'] == player_id:
