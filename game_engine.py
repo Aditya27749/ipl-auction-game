@@ -619,5 +619,9 @@ class AuctionRoom:
             "wickets": wickets_display,
             "sr_penalty": round(sr_penalty / 10.0, 1),
             "econ_penalty": round(econ_penalty / 10.0, 1),
-            "bonus": bonus
+            "bonus": bonus,
+            "raw_runs": total_runs,
+            "raw_wickets": total_wickets,
+            "raw_sr": round(avg_sr, 2),
+            "raw_econ": round(avg_econ, 2)
         }

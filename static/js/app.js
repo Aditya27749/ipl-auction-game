@@ -858,6 +858,14 @@ function renderResults(results) {
       const bd = res.score_breakdown;
       breakdownHTML = `
         <div style="background: rgba(0,0,0,0.4); padding: 10px; border-radius: 8px; margin: 15px 0; font-size: 0.85rem; font-family: monospace;">
+          <div style="color: #64ffda; margin-bottom: 5px; font-weight: bold; text-align: center;">RAW SQUAD STATS</div>
+          <div style="display: flex; justify-content: space-between;"><span>Total Runs:</span> <span>${bd.raw_runs}</span></div>
+          <div style="display: flex; justify-content: space-between;"><span>Total Wickets:</span> <span>${bd.raw_wickets}</span></div>
+          <div style="display: flex; justify-content: space-between;"><span>Avg Strike Rate:</span> <span style="color: ${bd.raw_sr >= 133.0 ? 'var(--success-green)' : 'var(--danger-red)'}">${bd.raw_sr}</span></div>
+          <div style="display: flex; justify-content: space-between;"><span>Avg Economy:</span> <span style="color: ${bd.raw_econ <= 8.00 ? 'var(--success-green)' : 'var(--danger-red)'}">${bd.raw_econ}</span></div>
+          
+          <hr style="border-color: rgba(255,255,255,0.1); margin: 8px 0;">
+          
           <div style="color: var(--primary-gold); margin-bottom: 5px; font-weight: bold; text-align: center;">AI PREDICTOR BREAKDOWN</div>
           <div style="display: flex; justify-content: space-between;"><span>1. Structure:</span> <span>${bd.structure.toFixed(1)} / 2.5</span></div>
           <div style="display: flex; justify-content: space-between;"><span>2. Overseas Limit:</span> <span>${bd.overseas.toFixed(1)} / 0.5</span></div>
