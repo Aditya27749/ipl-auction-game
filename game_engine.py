@@ -496,8 +496,12 @@ class AuctionRoom:
                 "budget_remaining": round(player_info["budget"], 2)
             })
             
-        # Sort by score descending
-        results.sort(key=lambda x: x["score"], reverse=True)
+        # Sort by score descending, then tiebreaker: Total Runs, then Total Wickets
+        results.sort(key=lambda x: (
+            x["score"], 
+            x.get("score_breakdown", {}).get("raw_runs", 0), 
+            x.get("score_breakdown", {}).get("raw_wickets", 0)
+        ), reverse=True)
         
         await self.broadcast({
             "type": "auction_end",
