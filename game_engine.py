@@ -606,16 +606,28 @@ class AuctionRoom:
         runs_display = round(runs_points / 10.0, 2)
         wickets_display = round(wickets_points / 10.0, 2)
         
-        # Secret Captain Bonus (Can break the 10.0 limit!)
+        # Secret Captain Bonus/Penalty (Can break the 10.0 limit!)
         bonus = 0.0
+        mission_status = "N/A"
         if secret_captain:
+            found = False
             for p in team:
                 if p["name"] == secret_captain:
-                    bonus = 0.5
-                    final_score += bonus
+                    found = True
                     break
+            
+            if found:
+                bonus = 0.5
+                final_score += bonus
+                mission_status = "Success"
+            else:
+                bonus = -0.5
+                final_score += bonus
+                mission_status = "Failed"
                     
         return {
+            "secret_captain": secret_captain,
+            "mission_status": mission_status,
             "total": final_score,
             "structure": structure_display,
             "overseas": overseas_display,

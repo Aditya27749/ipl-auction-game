@@ -873,7 +873,8 @@ function renderResults(results) {
           <div style="display: flex; justify-content: space-between;"><span>4. Total Wickets:</span> <span>${bd.wickets.toFixed(1)} / 3.5</span></div>
           ${bd.sr_penalty < 0 ? `<div style="display: flex; justify-content: space-between; color: var(--danger-red);"><span>Strike Rate Penalty:</span> <span>${bd.sr_penalty.toFixed(1)}</span></div>` : ''}
           ${bd.econ_penalty < 0 ? `<div style="display: flex; justify-content: space-between; color: var(--danger-red);"><span>Economy Penalty:</span> <span>${bd.econ_penalty.toFixed(1)}</span></div>` : ''}
-          ${bd.bonus > 0 ? `<div style="display: flex; justify-content: space-between; color: var(--success-green);"><span>Secret Mission Bonus:</span> <span>+${bd.bonus.toFixed(1)}</span></div>` : ''}
+          ${bd.mission_status === 'Success' ? `<div style="display: flex; justify-content: space-between; color: var(--success-green);"><span>Mission Success (${bd.secret_captain}):</span> <span>+0.5</span></div>` : ''}
+          ${bd.mission_status === 'Failed' ? `<div style="display: flex; justify-content: space-between; color: var(--danger-red);"><span>Mission Failed (${bd.secret_captain}):</span> <span>-0.5</span></div>` : ''}
         </div>
       `;
     }
