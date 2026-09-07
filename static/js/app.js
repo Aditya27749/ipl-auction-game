@@ -432,7 +432,7 @@ function handleWsMessage(msg) {
           document.getElementById('my-franchise-name').innerText = msg.ipl_team;
           document.getElementById('my-secret-captain').innerText = msg.secret_captain;
       }
-      showToast(`🕵️ SECRET MISSION: You are ${msg.ipl_team}. Draft ${msg.secret_captain} for a +0.5 score bonus!`, 'success', 8000);
+      showToast(`🕵️ SECRET MISSION: You are ${msg.ipl_team}. Draft ${msg.secret_captain} or you will receive a -0.5 penalty!`, 'success', 8000);
       break;
     case 'new_player':
       renderNewPlayer(msg.player, msg.index, msg.total);
@@ -873,7 +873,7 @@ function renderResults(results) {
           ${bd.overseas_penalty < 0 ? `<div style="display: flex; justify-content: space-between; color: var(--danger-red);"><span>Overseas Penalty:</span> <span>${bd.overseas_penalty.toFixed(1)}</span></div>` : ''}
           ${bd.sr_penalty < 0 ? `<div style="display: flex; justify-content: space-between; color: var(--danger-red);"><span>Strike Rate Penalty:</span> <span>${bd.sr_penalty.toFixed(1)}</span></div>` : ''}
           ${bd.econ_penalty < 0 ? `<div style="display: flex; justify-content: space-between; color: var(--danger-red);"><span>Economy Penalty:</span> <span>${bd.econ_penalty.toFixed(1)}</span></div>` : ''}
-          ${bd.mission_status === 'Success' ? `<div style="display: flex; justify-content: space-between; color: var(--success-green);"><span>Mission Success (${bd.secret_captain}):</span> <span>+0.5</span></div>` : ''}
+          ${bd.mission_status === 'Success' ? `<div style="display: flex; justify-content: space-between; color: var(--success-green);"><span>Mission Success (${bd.secret_captain}):</span> <span>+0.0 (No Penalty)</span></div>` : ''}
           ${bd.mission_status === 'Failed' ? `<div style="display: flex; justify-content: space-between; color: var(--danger-red);"><span>Mission Failed (${bd.secret_captain}):</span> <span>-0.5</span></div>` : ''}
         </div>
       `;
