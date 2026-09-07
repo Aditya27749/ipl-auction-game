@@ -75,6 +75,72 @@ const sounds = {
         osc.start();
         osc.stop(audioCtx.currentTime + 0.2);
     },
+    
+    playHeartbeat: function() {
+        if (audioCtx.state === 'suspended') return;
+        const osc = audioCtx.createOscillator();
+        const gainNode = audioCtx.createGain();
+        osc.connect(gainNode);
+        gainNode.connect(audioCtx.destination);
+        osc.type = 'sine';
+        osc.frequency.setValueAtTime(50, audioCtx.currentTime);
+        osc.frequency.exponentialRampToValueAtTime(30, audioCtx.currentTime + 0.1);
+        gainNode.gain.setValueAtTime(1, audioCtx.currentTime);
+        gainNode.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.4);
+        osc.start();
+        osc.stop(audioCtx.currentTime + 0.4);
+        
+        const osc2 = audioCtx.createOscillator();
+        const gain2 = audioCtx.createGain();
+        osc2.connect(gain2);
+        gain2.connect(audioCtx.destination);
+        osc2.type = 'sine';
+        osc2.frequency.setValueAtTime(50, audioCtx.currentTime + 0.15);
+        osc2.frequency.exponentialRampToValueAtTime(30, audioCtx.currentTime + 0.25);
+        gain2.gain.setValueAtTime(0.8, audioCtx.currentTime + 0.15);
+        gain2.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.5);
+        osc2.start(audioCtx.currentTime + 0.15);
+        osc2.stop(audioCtx.currentTime + 0.5);
+    },
+    playShredder: function() {
+        if (audioCtx.state === 'suspended') return;
+        const bufferSize = audioCtx.sampleRate * 2.0; // 2 seconds of noise
+        const buffer = audioCtx.createBuffer(1, bufferSize, audioCtx.sampleRate);
+        const data = buffer.getChannelData(0);
+        for (let i = 0; i < bufferSize; i++) {
+            data[i] = Math.random() * 2 - 1;
+        }
+        const noise = audioCtx.createBufferSource();
+        noise.buffer = buffer;
+        
+        const filter = audioCtx.createBiquadFilter();
+        filter.type = 'lowpass';
+        filter.frequency.setValueAtTime(500, audioCtx.currentTime);
+        filter.frequency.linearRampToValueAtTime(100, audioCtx.currentTime + 2.0);
+        
+        const gain = audioCtx.createGain();
+        gain.gain.setValueAtTime(0.5, audioCtx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 2.0);
+        
+        noise.connect(filter);
+        filter.connect(gain);
+        gain.connect(audioCtx.destination);
+        noise.start();
+    },
+    playTick: function() {
+        if (audioCtx.state === 'suspended') return;
+        const osc = audioCtx.createOscillator();
+        const gain = audioCtx.createGain();
+        osc.connect(gain);
+        gain.connect(audioCtx.destination);
+        osc.type = 'square';
+        osc.frequency.setValueAtTime(400, audioCtx.currentTime);
+        gain.gain.setValueAtTime(0.05, audioCtx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.05);
+        osc.start();
+        osc.stop(audioCtx.currentTime + 0.05);
+    }
+
     playSuccess: function() {
         if (audioCtx.state === 'suspended') return;
         const osc = audioCtx.createOscillator();
@@ -533,12 +599,16 @@ function handleWsMessage(msg) {
     case 'timer_update':
       if (document.getElementById('bidding-timer')) {
         document.getElementById('bidding-timer').innerText = msg.seconds;
-        if (msg.seconds > 0 && msg.seconds <= 10) playTickSound();
-
-        if (msg.seconds <= 5) {
+        
+        if (msg.seconds > 5 && msg.seconds <= 10) sounds.playTick();
+        
+        if (msg.seconds > 0 && msg.seconds <= 5) {
+          sounds.playHeartbeat();
+          document.body.classList.add('panic-mode');
           document.getElementById('bidding-timer-container').style.color = '#ff4444';
           document.getElementById('bidding-timer-container').style.textShadow = '0 0 10px rgba(255, 68, 68, 0.5)';
         } else {
+          if (msg.seconds === 0) document.body.classList.remove('panic-mode');
           document.getElementById('bidding-timer-container').style.color = '#ffeb3b';
           document.getElementById('bidding-timer-container').style.textShadow = '0 0 10px rgba(255, 235, 59, 0.5)';
         }
@@ -827,11 +897,17 @@ function handlePlayerSold(msg) {
 }
 
 function handlePlayerUnsold(msg) {
-  playUnsoldSound();
+  document.body.classList.remove('panic-mode');
+  sounds.playShredder();
 
   els.auction.btnBid.disabled = true;
-  els.auction.unsoldOverlay.classList.remove('hidden');
-  addLogEntry(`❌ ${msg.player?.name || 'Player'} went UNSOLD`);
+  
+  const pc = document.getElementById('player-card');
+  if (pc) {
+      pc.classList.add('shredder-active');
+  }
+  
+  addLogEntry(`❌ ${msg.player?.name || 'Player'} went UNSOLD and was SHREDDED!`);
 }
 
 function updateMyTeam(team) {
