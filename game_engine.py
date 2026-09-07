@@ -541,18 +541,18 @@ class AuctionRoom:
         ar_penalty = abs(3 - roles.get("All-Rounder", 0)) * 2
         wk_penalty = abs(2 - roles.get('Wicket-Keeper', 0)) * 3
         
-        structure_score = 25 - (bat_penalty + bwl_penalty + ar_penalty + wk_penalty)
+        structure_score = 30 - (bat_penalty + bwl_penalty + ar_penalty + wk_penalty)
         score += max(0, structure_score)
         
         # Penalty for empty squad slots (Must be 15)
         missing_players = 15 - len(team)
         score -= (missing_players * 3)
 
-        # 2. Overseas Limits (Max 5 Points)
-        if overseas_count <= 6:
-            score += 5
-        else:
-            score -= (overseas_count - 6) * 5
+        # 2. Overseas Limits (Penalty Only)
+        overseas_penalty = 0.0
+        if overseas_count > 6:
+            overseas_penalty = -((overseas_count - 6) * 5)
+            score += overseas_penalty
 
         # 3. True Statistical AI Predictor (Max 50 Points)
         # Using real Cricsheet data to predict match-winning potential
@@ -602,7 +602,7 @@ class AuctionRoom:
         
         # Breakdown values scaled to /10
         structure_display = round(max(0.0, structure_score / 10.0), 2)
-        overseas_display = 0.5 if overseas_count <= 6 else round(max(0.0, (5 - (overseas_count - 6) * 5) / 10.0), 2)
+        overseas_penalty_display = round(overseas_penalty / 10.0, 2)
         runs_display = round(runs_points / 10.0, 2)
         wickets_display = round(wickets_points / 10.0, 2)
         
@@ -630,7 +630,7 @@ class AuctionRoom:
             "mission_status": mission_status,
             "total": final_score,
             "structure": structure_display,
-            "overseas": overseas_display,
+            "overseas_penalty": overseas_penalty_display,
             "runs": runs_display,
             "wickets": wickets_display,
             "sr_penalty": round(sr_penalty / 10.0, 1),

@@ -867,10 +867,10 @@ function renderResults(results) {
           <hr style="border-color: rgba(255,255,255,0.1); margin: 8px 0;">
           
           <div style="color: var(--primary-gold); margin-bottom: 5px; font-weight: bold; text-align: center;">AI PREDICTOR BREAKDOWN</div>
-          <div style="display: flex; justify-content: space-between;"><span>1. Structure:</span> <span>${bd.structure.toFixed(1)} / 2.5</span></div>
-          <div style="display: flex; justify-content: space-between;"><span>2. Overseas Limit:</span> <span>${bd.overseas.toFixed(1)} / 0.5</span></div>
-          <div style="display: flex; justify-content: space-between;"><span>3. Total Runs:</span> <span>${bd.runs.toFixed(1)} / 3.5</span></div>
-          <div style="display: flex; justify-content: space-between;"><span>4. Total Wickets:</span> <span>${bd.wickets.toFixed(1)} / 3.5</span></div>
+          <div style="display: flex; justify-content: space-between;"><span>1. Structure:</span> <span>${bd.structure.toFixed(1)} / 3.0</span></div>
+          <div style="display: flex; justify-content: space-between;"><span>2. Total Runs:</span> <span>${bd.runs.toFixed(1)} / 3.5</span></div>
+          <div style="display: flex; justify-content: space-between;"><span>3. Total Wickets:</span> <span>${bd.wickets.toFixed(1)} / 3.5</span></div>
+          ${bd.overseas_penalty < 0 ? `<div style="display: flex; justify-content: space-between; color: var(--danger-red);"><span>Overseas Penalty:</span> <span>${bd.overseas_penalty.toFixed(1)}</span></div>` : ''}
           ${bd.sr_penalty < 0 ? `<div style="display: flex; justify-content: space-between; color: var(--danger-red);"><span>Strike Rate Penalty:</span> <span>${bd.sr_penalty.toFixed(1)}</span></div>` : ''}
           ${bd.econ_penalty < 0 ? `<div style="display: flex; justify-content: space-between; color: var(--danger-red);"><span>Economy Penalty:</span> <span>${bd.econ_penalty.toFixed(1)}</span></div>` : ''}
           ${bd.mission_status === 'Success' ? `<div style="display: flex; justify-content: space-between; color: var(--success-green);"><span>Mission Success (${bd.secret_captain}):</span> <span>+0.5</span></div>` : ''}
