@@ -1,4 +1,45 @@
 
+// --- Interactive Features ---
+let bidTimestamps = [];
+let bidWarTimeout = null;
+
+function sendEmoji(emoji) {
+    sendMessage({ type: 'emoji', emoji: emoji });
+}
+
+function spawnEmoji(emojiStr) {
+    const el = document.createElement('div');
+    el.className = 'floating-emoji';
+    el.innerText = emojiStr;
+    
+    // Random horizontal position (20% to 80% of screen width)
+    const randomX = Math.floor(Math.random() * 60) + 20;
+    el.style.left = randomX + 'vw';
+    
+    document.body.appendChild(el);
+    setTimeout(() => {
+        if (el.parentNode) el.parentNode.removeChild(el);
+    }, 2500);
+}
+
+function checkBidWar() {
+    const now = Date.now();
+    bidTimestamps.push(now);
+    
+    // Keep bids from the last 3 seconds
+    bidTimestamps = bidTimestamps.filter(t => now - t < 3000);
+    
+    if (bidTimestamps.length >= 5) {
+        document.body.classList.add('bid-war-active');
+        if (bidWarTimeout) clearTimeout(bidWarTimeout);
+        
+        bidWarTimeout = setTimeout(() => {
+            document.body.classList.remove('bid-war-active');
+        }, 3000);
+    }
+}
+
+
 // --- Audio Engine ---
 const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
 document.body.addEventListener('click', () => {
@@ -503,6 +544,9 @@ function handleWsMessage(msg) {
         }
       }
       break;
+    case 'emoji':
+      spawnEmoji(msg.emoji);
+      break;
     case 'bid_update':
       updateBid(msg.amount, msg.bidder_name, msg.bidder_id);
       break;
@@ -677,6 +721,21 @@ function updateBid(amount, bidderName, bidderId) {
   state.currentBidder = bidderId;
   state.currentBidderName = bidderName;
   
+  checkBidWar();
+  
+  // Update Leader Crown
+  document.querySelectorAll('.crown-icon').forEach(el => el.remove());
+  document.querySelectorAll('.leader-pill').forEach(el => el.classList.remove('leader-pill'));
+  
+  const leaderPill = document.getElementById('budget-pill-' + bidderId);
+  if (leaderPill) {
+      leaderPill.classList.add('leader-pill');
+      const crown = document.createElement('div');
+      crown.className = 'crown-icon';
+      crown.innerText = '👑';
+      leaderPill.appendChild(crown);
+  }
+  
   // Animate the bid amount
   els.auction.currBidAmt.innerText = formatCurrency(amount);
   els.auction.currBidAmt.style.animation = 'none';
@@ -847,7 +906,12 @@ function updateAllBudgets(budgets) {
   for (const [playerId, data] of Object.entries(budgets)) {
     const isMe = playerId === state.playerId;
     const div = document.createElement('div');
+    div.id = 'budget-pill-' + playerId;
     div.className = `budget-pill ${isMe ? 'is-me' : ''}`;
+    // Restore crown if they are the current bidder
+    if (playerId === state.currentBidder) {
+        div.classList.add('leader-pill');
+    }
     div.style.flexDirection = 'column';
     div.style.alignItems = 'stretch';
     div.style.borderRadius = '8px';
@@ -868,6 +932,7 @@ function updateAllBudgets(budgets) {
         <span>Players: <span style="color: ${players >= 15 ? 'var(--success-green)' : '#fff'}">${players}/15</span></span>
         <span>Foreign: <span style="color: ${overseas >= 6 ? 'var(--danger-red)' : '#fff'}">${overseas}/6</span></span>
       </div>
+      ${playerId === state.currentBidder ? '<div class="crown-icon">👑</div>' : ''}
     `;
     els.auction.allBudgets.appendChild(div);
   }

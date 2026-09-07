@@ -238,6 +238,15 @@ async def websocket_endpoint(websocket: WebSocket, room_code: str, player_id: st
                 else:
                     logger.warning(f"Unauthorized sell attempt from {player_id} (host is {room_data['host_id']})")
                     
+            elif msg_type == "emoji":
+                if room_code in active_rooms:
+                    emoji = msg.get("emoji", "👍")
+                    await active_rooms[room_code].broadcast({
+                        "type": "emoji",
+                        "emoji": emoji,
+                        "sender_id": player_id
+                    })
+                    
             elif msg_type == "leave_room":
                 logger.info(f"Player {player_id} intentionally left room {room_code}")
                 if player_id in room.players:
