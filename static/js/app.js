@@ -902,12 +902,16 @@ function renderResults(results) {
     card.className = `rank-card ${rank === 1 ? 'rank-1' : ''} ${isMe ? 'is-me' : ''}`;
     
     card.innerHTML = `
-      <div class="rank-badge">${badge}</div>
-      <h3>${res.player_name || 'Player'} ${isMe ? '(You)' : ''}</h3>
-      <p>Budget remaining: ${formatCurrency(res.budget_remaining || 0)}</p>
-      <p>Players drafted: ${res.team_size || (res.team ? res.team.length : 0)}/15</p>
-      <div class="score-circle">${score.toFixed(1)}</div>
-      <p style="margin-top:8px;font-size:0.8rem;color:var(--text-muted);">out of 10</p>
+      <div class="result-header" style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 10px;">
+        <div style="font-size: 1.5rem;">${badge}</div>
+        <h3 style="margin: 0;">${res.player_name || 'Player'} ${isMe ? '(You)' : ''}</h3>
+        <div class="score-circle" style="width: 50px; height: 50px; font-size: 1.2rem;">${score.toFixed(1)}</div>
+      </div>
+      <div style="display: flex; justify-content: space-between; font-size: 0.85rem; color: var(--text-muted); margin-bottom: 10px;">
+        <span>Players: ${res.team_size || (res.team ? res.team.length : 0)}/15</span>
+        <span>Budget Left: ${formatCurrency(res.budget_remaining || 0)}</span>
+      </div>
+      ${typeof breakdownHTML !== 'undefined' ? breakdownHTML : ''}
       ${teamHTML}
     `;
     
