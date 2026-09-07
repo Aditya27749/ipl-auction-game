@@ -589,11 +589,11 @@ class AuctionRoom:
         sr_penalty = 0.0
         econ_penalty = 0.0
         
-        if avg_sr < 133.0:
+        if avg_sr < 137.0:
             sr_penalty = -20.0
             score += sr_penalty
         
-        if avg_econ > 8.0:
+        if avg_econ > 7.7:
             econ_penalty = -20.0
             score += econ_penalty
 

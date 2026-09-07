@@ -780,11 +780,11 @@ function updateMyTeam(team) {
   
   if (srEl) {
       srEl.innerText = avgSR;
-      srEl.style.color = (parseFloat(avgSR) >= 133.0) ? 'var(--success-green)' : (avgSR === "0.0" ? 'white' : 'var(--danger-red)');
+      srEl.style.color = (parseFloat(avgSR) >= 137.0) ? 'var(--success-green)' : (avgSR === "0.0" ? 'white' : 'var(--danger-red)');
   }
   if (econEl) {
       econEl.innerText = avgEcon;
-      econEl.style.color = (parseFloat(avgEcon) <= 8.00 && econCount > 0) ? 'var(--success-green)' : (avgEcon === "0.0" ? 'white' : 'var(--danger-red)');
+      econEl.style.color = (parseFloat(avgEcon) <= 7.70 && econCount > 0) ? 'var(--success-green)' : (avgEcon === "0.0" ? 'white' : 'var(--danger-red)');
   }
 }
 
@@ -861,8 +861,8 @@ function renderResults(results) {
           <div style="color: #64ffda; margin-bottom: 5px; font-weight: bold; text-align: center;">RAW SQUAD STATS</div>
           <div style="display: flex; justify-content: space-between;"><span>Total Runs:</span> <span>${bd.raw_runs}</span></div>
           <div style="display: flex; justify-content: space-between;"><span>Total Wickets:</span> <span>${bd.raw_wickets}</span></div>
-          <div style="display: flex; justify-content: space-between;"><span>Avg Strike Rate:</span> <span style="color: ${bd.raw_sr >= 133.0 ? 'var(--success-green)' : 'var(--danger-red)'}">${bd.raw_sr}</span></div>
-          <div style="display: flex; justify-content: space-between;"><span>Avg Economy:</span> <span style="color: ${bd.raw_econ <= 8.00 ? 'var(--success-green)' : 'var(--danger-red)'}">${bd.raw_econ}</span></div>
+          <div style="display: flex; justify-content: space-between;"><span>Avg Strike Rate:</span> <span style="color: ${bd.raw_sr >= 137.0 ? 'var(--success-green)' : 'var(--danger-red)'}">${bd.raw_sr}</span></div>
+          <div style="display: flex; justify-content: space-between;"><span>Avg Economy:</span> <span style="color: ${bd.raw_econ <= 7.70 ? 'var(--success-green)' : 'var(--danger-red)'}">${bd.raw_econ}</span></div>
           
           <hr style="border-color: rgba(255,255,255,0.1); margin: 8px 0;">
           
