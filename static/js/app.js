@@ -142,6 +142,7 @@ const sounds = {
         osc.stop(fxAudioCtx.currentTime + 0.05);
     }
 
+,
     playSuccess: function() {
         if (!fxAudioCtx || fxAudioCtx.state === 'suspended') return;
         const osc = fxAudioCtx.createOscillator();
@@ -1192,11 +1193,13 @@ document.addEventListener('DOMContentLoaded', init);
 
 
 // --- Advanced Audio System (Improved IPL Tune) ---
-const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+let audioCtx = null;
+try { audioCtx = new (window.AudioContext || window.webkitAudioContext)(); } catch(e){}
 const GLOBAL_VOLUME = 0.15; // Slightly bumped up but still soft
 
 function playHornTone(freq, duration, delay) {
-    if(audioCtx.state === 'suspended') return;
+    if(!audioCtx || audioCtx.state === 'suspended') return;
+    if(!audioCtx || audioCtx.state === 'suspended') return;
     const osc = audioCtx.createOscillator();
     const gain = audioCtx.createGain();
     const filter = audioCtx.createBiquadFilter();
@@ -1231,7 +1234,7 @@ const iplHornAudio = new Audio("/static/ipl_horn.webm");
 iplHornAudio.volume = 0.15;
 
 function playSoldSound() {
-    if(audioCtx.state === "suspended") audioCtx.resume();
+    if(!audioCtx || audioCtx.state === 'suspended') audioCtx.resume();
     iplHornAudio.currentTime = 0;
     iplHornAudio.play().catch(e => console.log("Audio play failed:", e));
     setTimeout(() => {
@@ -1252,7 +1255,7 @@ function playSoldSound() {
 }
 
 function playBidSound() {
-    if(audioCtx.state === 'suspended') audioCtx.resume();
+    if(!audioCtx || audioCtx.state === 'suspended') audioCtx.resume();
     const osc = audioCtx.createOscillator();
     const gain = audioCtx.createGain();
     
@@ -1271,7 +1274,7 @@ function playBidSound() {
     osc.stop(audioCtx.currentTime + 0.15);
 }
 function playUnsoldSound() {
-    if(audioCtx.state === 'suspended') audioCtx.resume();
+    if(!audioCtx || audioCtx.state === 'suspended') audioCtx.resume();
     const osc = audioCtx.createOscillator();
     const gain = audioCtx.createGain();
     
@@ -1297,7 +1300,7 @@ function playUnsoldSound() {
 }
 
 function playTickSound() {
-    if(audioCtx.state === 'suspended') return;
+    if(!audioCtx || audioCtx.state === 'suspended') return;
     
     const osc = audioCtx.createOscillator();
     const gain = audioCtx.createGain();
