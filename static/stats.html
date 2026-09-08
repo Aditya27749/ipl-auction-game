@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Database & AI Analytics - T20 Auction Simulator</title>
+    <style>
+        body {
+            background-color: #0f172a;
+            color: #cbd5e1;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            line-height: 1.8;
+            margin: 0;
+            padding: 40px 20px;
+        }
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            background: rgba(30, 41, 59, 0.8);
+            padding: 50px;
+            border-radius: 12px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        h1 {
+            color: #38bdf8;
+            font-size: 2.5rem;
+            border-bottom: 2px solid rgba(56, 189, 248, 0.3);
+            padding-bottom: 15px;
+        }
+        h2 {
+            color: #facc15;
+            margin-top: 40px;
+            font-size: 1.8rem;
+        }
+        h3 {
+            color: #ec4899;
+            margin-top: 30px;
+        }
+        p, li {
+            font-size: 1.1rem;
+        }
+        a {
+            color: #38bdf8;
+            text-decoration: none;
+        }
+        a:hover {
+            text-decoration: underline;
+        }
+        .back-btn {
+            display: inline-block;
+            margin-bottom: 30px;
+            padding: 10px 20px;
+            background: #2563eb;
+            color: white;
+            border-radius: 8px;
+            font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        .back-btn:hover { background: #1d4ed8; text-decoration: none; }
+        .highlight-box {
+            background: rgba(255, 255, 255, 0.05);
+            border-left: 4px solid #facc15;
+            padding: 20px;
+            margin: 30px 0;
+            border-radius: 0 8px 8px 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <a href="/" class="back-btn">← Back to Game Lobby</a>
+        <h1>Database & AI Analytics</h1>
+        <div class="content">
+            
+<p>The T20 Auction Simulator utilizes a massive, dynamic database of historical cricket statistics to power the AI Evaluator. Understanding how these stats are applied is crucial for mastering the game.</p>
+
+<h2>Player Ratings (0.0 to 10.0)</h2>
+<p>Every player in the database is assigned a base rating. This rating dictates their expected value during the auction. The rating is calculated using a proprietary formula that weighs career runs, wickets, strike rate, economy, and historical franchise impact.</p>
+
+<h3>The "God Tier" Players</h3>
+<p>A select few players in the database have achieved a perfect <strong>10.0 Rating</strong>. These players are mathematically guaranteed to boost your squad's total score massively. When a God Tier player appears on the auction block, expect a fierce bidding war. Currently, the 10.0 club includes legends like Virat Kohli, Jasprit Bumrah, and MS Dhoni.</p>
+
+<h2>How the AI Calculates Your Final Score</h2>
+<p>At the end of the 15-round draft, the AI Engine runs a simulation based on your roster's combined statistics. The maximum raw score is 100 points, which is then divided by 10 to give you a final rating out of 10.0.</p>
+<ul>
+    <li><strong>Structure (30 Points):</strong> Awarded for perfectly meeting the 5 BAT / 3 AR / 5 BOWL / 2 WK requirement.</li>
+    <li><strong>Total Runs (35 Points):</strong> Scaled against the highest run-scoring team in the room.</li>
+    <li><strong>Total Wickets (35 Points):</strong> Scaled against the highest wicket-taking team in the room.</li>
+</ul>
+
+<div class="highlight-box">
+    <strong>💡 TIEBREAKER RULE:</strong> If two teams achieve the exact same AI Score (e.g., 9.5), the engine will break the tie by comparing Total Squad Runs first, followed by Total Squad Wickets. Every single run matters!
+</div>
+
+        </div>
+    </div>
+</body>
+</html>
