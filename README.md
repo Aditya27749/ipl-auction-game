@@ -4,6 +4,12 @@ Welcome to the **T20 Auction Simulator**, a real-time, highly interactive, multi
 
 Built with **FastAPI**, **WebSockets**, and **Vanilla JS**, this simulator goes far beyond standard fantasy cricket. It features an advanced AI evaluator, strict squad composition rules, and intense psychological gamification (like panic timers, bidding war lightning, and live emoji trash talk) to make your auction room as chaotic and realistic as possible!
 
+
+## 🌍 Live Demo & Access
+
+You can play the game live on our server! 
+**Website Link / IP Address:** `http://YOUR_IP_ADDRESS_HERE` *(Replace with actual live link/IP)*
+
 ## ✨ Key Features
 
 - **🌐 Real-Time Multiplayer Bidding:** Join a room with up to 20 friends via WebSockets. Bids update instantly across all devices.
@@ -62,11 +68,11 @@ The AI engine is brutal. If you do not draft intelligently, your final score wil
 
 ```mermaid
 graph TD;
-    Client[Web Browser (JS/HTML)] <-->|WebSockets (Real-Time Bids)| Server[FastAPI Async Server]
-    Client -->|HTTP GET/POST| Server
-    Server <-->|SQL Queries| DB[(SQLite: ipl_auction.db)]
-    Server --> Engine[GameEngine.py (Logic & AI)]
-    Engine --> Timer[Asyncio Event Loop]
+    Client["Web Browser (JS/HTML)"] <-->|"WebSockets (Real-Time Bids)"| Server["FastAPI Async Server"]
+    Client -->|"HTTP GET/POST"| Server
+    Server <-->|"SQL Queries"| DB[("SQLite: ipl_auction.db")]
+    Server --> Engine["GameEngine.py (Logic & AI)"]
+    Engine --> Timer["Asyncio Event Loop"]
 ```
 
 ## 💰 Monetization Ready
