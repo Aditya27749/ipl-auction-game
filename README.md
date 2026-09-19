@@ -8,7 +8,7 @@ Built with **FastAPI**, **WebSockets**, and **Vanilla JS**, this simulator goes 
 ## 🌍 Live Demo & Access
 
 You can play the game live on our server! 
-**Website Link / IP Address:** `http://YOUR_IP_ADDRESS_HERE` *(Replace with actual live link/IP)*
+**Website Link / IP Address:** `[https://www.aditya-ipl.me/]` *(Replace with actual live link/IP)*
 
 ## ✨ Key Features
 
