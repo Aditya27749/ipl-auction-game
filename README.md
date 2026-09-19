@@ -1,75 +1,76 @@
-# 🏏 IPL Auction Game
+# 🏏 T20 Auction Simulator (Multiplayer)
 
-Welcome to the **IPL Auction Game**, a web-based simulation where you can experience the thrill of the IPL auction table!
+Welcome to the **T20 Auction Simulator**, a real-time, highly interactive, multiplayer web-based game where you and your friends compete as billionaire franchise owners to build the ultimate cricket squad.
 
-## 📸 Screenshots
-*(Coming soon)*
-> Place your game screenshot here.
+Built with **FastAPI**, **WebSockets**, and **Vanilla JS**, this simulator goes far beyond standard fantasy cricket. It features an advanced AI evaluator, strict squad composition rules, and intense psychological gamification (like panic timers, bidding war lightning, and live emoji trash talk) to make your auction room as chaotic and realistic as possible!
 
-## ✨ Features
-- **Real Player Data**: Over 80 real IPL players with authentic stats and categories.
-- **Bidding Simulation**: Real-time bidding engine with an intuitive interface.
-- **Squad Building**: Build your dream team within a limited budget (Purse).
-- **Player Stats & Ratings**: Players have custom ratings from 3.0 to 10.0.
+## ✨ Key Features
+
+- **🌐 Real-Time Multiplayer Bidding:** Join a room with up to 20 friends via WebSockets. Bids update instantly across all devices.
+- **📈 Massive Authentic Database:** Over 550 real T20 players with actual historical statistics (Runs, Wickets, Strike Rate, Economy) powered by Cricsheet data.
+- **🧠 AI Squad Evaluator:** At the end of the 15-round draft, a custom AI mathematically grades your team out of **10.0**. There is no arguing—the AI decides who drafted the best team based on raw stats.
+- **🎯 Strict Franchise Rules:** To get a perfect score, you must balance a ₹120.00 CR budget and draft exactly:
+  - **5 Batsmen** (Avg Strike Rate >= 137.0)
+  - **5 Bowlers** (Avg Economy <= 7.70)
+  - **3 All-Rounders**
+  - **2 Wicket-Keepers**
+  - **Max 6 Overseas Players**
+- **🕵️ Secret Missions:** Every player is secretly assigned a "Secret Captain" to draft. Fail to buy them, and you suffer a massive point penalty!
+- **⚡ Gamified Interactive UI:**
+  - **Heartbeat Panic Timer:** When the clock hits 5 seconds, the screen flashes red and a heartbeat monitor plays.
+  - **Bid War Lightning:** Fast bidding triggers a blue lightning overlay on the screen.
+  - **Live Emojis:** Spam 😂, 🤡, 🤬, and 🔥 across everyone's screens in real-time.
+  - **The Shredder:** Unsold players are literally ripped in half and shredded on screen with sound effects.
+  - **Leader Crown:** The highest bidder gets a glowing 👑 next to their name.
 
 ## 🛠️ Tech Stack
-- **Backend**: Python, SQLite, (FastAPI/Flask placeholder)
-- **Frontend**: HTML, CSS, JavaScript (Vanilla or React - depending on the server)
-- **Database**: SQLite3 (`ipl_auction.db`)
 
-## 🚀 How to Run
+- **Backend:** Python 3.10+, FastAPI, Uvicorn, WebSockets
+- **Frontend:** HTML5, CSS3, Vanilla JavaScript (Single Page Application)
+- **Database:** SQLite3
+- **Deployment:** Docker
 
-1. Clone or navigate to the project directory:
+## 🚀 How to Run (Docker)
+
+The absolute easiest way to run the game and make it accessible to your friends on your local network or server is using Docker.
+
+1. **Clone the repository:**
    ```bash
+   git clone https://github.com/Aditya27749/ipl-auction-game.git
    cd ipl-auction-game
    ```
-2. Install the necessary requirements:
-   ```bash
-   pip install -r requirements.txt
-   ```
-3. Seed the player database:
-   ```bash
-   python seed_data.py
-   ```
-4. Start the server:
-   ```bash
-   python server.py
-   ```
-5. Open your browser and go to `http://localhost:8000`
 
-## 🎮 How to Play
-1. You start with a fixed purse (e.g., ₹100 Crores).
-2. Players appear one by one on the auction table.
-3. You can choose to place a bid or skip.
-4. Other AI teams will compete with you for the players.
-5. Highest bidder signs the player!
-6. Form a squad of minimum 15 players with a max of 4 overseas players.
+2. **Build and Run the Docker Container:**
+   ```bash
+   sudo docker build -t ipl-game .
+   sudo docker run -d -p 80:7860 --restart unless-stopped ipl-game
+   ```
 
-## 📊 Scoring System
-Players are rated based on their past performances, role, and current demand:
-- **Rating 8.5-10**: Elite/Marquee players, expect bidding wars up to ₹15-20 Cr.
-- **Rating 7-8.5**: Solid starters, bids usually between ₹5-12 Cr.
-- **Rating 5-7**: Role players, backup options. ₹1-5 Cr.
-- **Rating 3-5**: Budget options and uncapped players. Base price to ₹1 Cr.
+3. **Play the Game:**
+   Open your browser and navigate to `http://localhost` (or your server's IP address).
 
-## 🏗️ Architecture Diagram
+## 📊 Scoring & Penalties
+
+The AI engine is brutal. If you do not draft intelligently, your final score will plummet:
+- **Overseas Penalty:** -0.5 points for every overseas player above the limit of 6.
+- **Strike Rate Penalty:** -2.0 points if your team's average Batting SR drops below 137.0.
+- **Economy Penalty:** -2.0 points if your team's average Bowling Econ goes above 7.70.
+- **Secret Mission Failed:** -0.5 points if you do not successfully buy your secretly assigned target.
+- **Tiebreakers:** Ties are broken by Total Squad Runs, then Total Squad Wickets.
+
+## 🏗️ Architecture Overview
 
 ```mermaid
 graph TD;
-    Client[Web Browser] -->|HTTP/REST| Server[Python Server]
-    Server -->|Read/Write| DB[(SQLite Database)]
-    Server --> Engine[Auction Engine]
-    Engine --> AI[AI Bidding Logic]
-    Engine --> Rules[Rule Validation]
+    Client[Web Browser (JS/HTML)] <-->|WebSockets (Real-Time Bids)| Server[FastAPI Async Server]
+    Client -->|HTTP GET/POST| Server
+    Server <-->|SQL Queries| DB[(SQLite: ipl_auction.db)]
+    Server --> Engine[GameEngine.py (Logic & AI)]
+    Engine --> Timer[Asyncio Event Loop]
 ```
 
-## 📖 API Documentation
-| Endpoint | Method | Description |
-|----------|--------|-------------|
-| `/api/players` | GET | List all available players |
-| `/api/player/:id` | GET | Get specific player details |
-| `/api/bid` | POST | Submit a bid for a player |
-| `/api/squad` | GET | View current squad and remaining purse |
+## 💰 Monetization Ready
+The frontend is already configured with an SEO-friendly content wrapper, Legal Boilerplate pages (Privacy Policy, Terms of Service), and is highly optimized for **Monetag** In-Page Push or Vignette ad networks. 
 
 ## 📝 License
-This project is licensed under the MIT License.
+This project is for educational and simulation purposes. Not affiliated with any official cricket boards (BCCI, IPL, etc.). All player statistics are factual public domain data.
