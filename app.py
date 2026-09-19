@@ -143,11 +143,14 @@ async def websocket_endpoint(websocket: WebSocket, room_code: str, player_id: st
         
     room = active_rooms[room_code]
     
-    room.players[player_id] = {
+    if player_id not in room.players:
+        room.players[player_id] = {}
+        
+    room.players[player_id].update({
         "ws": websocket,
         "name": player_info["player_name"],
         "budget": player_info["budget"]
-    }
+    })
     
     # Broadcast lobby update with normalized player data
     await broadcast_lobby_update(room, room_data['host_id'])
